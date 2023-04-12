@@ -1,0 +1,28 @@
+import { useReducer } from "react";
+import { Action } from "redux";
+
+export const login: Login = {
+  isLogin: true,
+  form: {
+    email: "",
+    password: "",
+    repeatedPassword: "",
+    rememberMe: false,
+  },
+};
+
+const inicialState: [Login] = [login];
+const reducer = (state: any, action: Action) => {
+  switch (action.type) {
+    case "CHANGE":
+      return state;
+  }
+};
+
+export default () => {
+  const [state, dispatch] = useReducer(reducer, inicialState);
+  const changeLoginState = () => {};
+  const changeLoginValueByKey = () => {};
+
+  return [state, changeLoginState,changeLoginValueByKey];
+};
