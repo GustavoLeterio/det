@@ -1,16 +1,15 @@
-import React from 'react'
 import { Keyboard } from 'react-native';
 import styled from "styled-components/native";
-import { AppDispatch } from '../../Store/types';
-import { changeLoginValueByKey } from '../../Store/Slices/Login/actions';
+import { Dispatcher } from '../../Store/types';
 import { ThemeModel } from '../../Store/Slices/Themes/IThemes';
 import type { EmitterSubscription } from 'react-native';
+import React from 'react';
 
-interface Props { theme: ThemeModel, label: string, name: string, placeholder?: string, dispatch: AppDispatch, bindValue: string }
+interface Props { theme: ThemeModel, label: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
 // ({ label, name, placeholder, dispatch, bindValue }: Props) =>
 class InputComponent extends React.Component<Props, { value: string }> {
 
-  state = { value: this.props.bindValue }
+  state = { value: this.props.value }
 
   TextInput = styled.TextInput`
     padding: 10px;
@@ -40,7 +39,14 @@ class InputComponent extends React.Component<Props, { value: string }> {
   keyboardDidHideSubscription?: EmitterSubscription;
   componentDidMount(): void {
     this.keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      this.props.dispatch(changeLoginValueByKey({ key: this.props.name, value: this.state.value }));
+      const { dispatch, actionWithPayload } = this.props.dispatcher;
+      if (actionWithPayload) {
+        setTimeout(() => {
+          dispatch(actionWithPayload(this.state.value));
+        })
+      }
+      else
+        alert("ERROR: 'ActionWithPayload' NOT INFORMED")
     });
   }
 

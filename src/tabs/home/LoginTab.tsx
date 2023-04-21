@@ -1,16 +1,19 @@
 import styled from "styled-components/native";
 import { useAppDispatch } from "../../Store/hooks/useAppDispatch";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
+import { useNavigation } from '@react-navigation/native';
 import { changeTheme } from "../../Store/Slices/Themes/actions";
 import LoginSlider from "../../Components/LoginSlider/LoginSlider";
 import InputComponent from "../../Components/InputComponent/InputComponent";
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { View, TouchableOpacity } from "react-native";
-import { changeLoginState } from "../../Store/Slices/Login/actions";
+import { changeLoginEmail, changeLoginPassword, changeLoginState, toggleRememberMe } from "../../Store/Slices/Login/actions";
+import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
+import { Action } from "redux";
 
-export const LoginTab = () => {
+export const LoginTab = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
-  const { color, fonts } = useAppSelector((store) => store.theme);
+  const theme = useAppSelector((store) => store.theme);
   const { isLogin, form } = useAppSelector((store) => store.login);
 
   const Container = styled.View`
@@ -18,7 +21,7 @@ export const LoginTab = () => {
     display: flex;
     align-items: center;
     height: 100%;
-    background-color: ${color.white};
+    background-color: ${theme.color.white};
   `;
 
   const Banner = styled.ImageBackground`
@@ -36,24 +39,24 @@ export const LoginTab = () => {
     flex-direction: column;
     align-items: center;
     gap: 24px;
-    padding: 24px;
+    padding: 18px;
     width: 80%;
     border-radius: 20px;
     top: -5%;
-    background-color: ${color.white};
+    background-color: ${theme.color.white};
     elevation: 40;
   `;
 
   const Title = styled.Text`
     font-size: 24px;
-    font-weight: ${fonts.bold};
-    color:${color.primary};
+    font-weight: ${theme.fonts.bold};
+    color:${theme.color.primary};
   `;
 
   const Text = styled.Text`
     font-size: 14px;
-    font-weight: ${fonts.medium};
-    color: ${color.fontGray};
+    font-weight: ${theme.fonts.medium};
+    color: ${theme.color.fontGray};
   `;
 
   const FHead = styled.View`
@@ -62,17 +65,17 @@ export const LoginTab = () => {
   `;
 
   const StyledButton = styled.TouchableOpacity`
-    background-color: ${color.primary};
+    background-color: ${theme.color.primary};
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 20px;
+    padding: 6px;
     border-radius: 5px;
     width: 100%;
   `;
 
   const ButtonText = styled.Text`
-    color: ${color.white};
+    color: ${theme.color.white};
     font-size: 24px;
     font-weight: bold;
   `;
@@ -85,28 +88,38 @@ export const LoginTab = () => {
   `;
 
   return (
-    <Container>
+    <Container >
       <Banner source={require("../../../assets/Login/LoginBanner.png")}>
         <Logo source={require("../../../assets/Logo.png")} />
       </Banner>
       <Form>
         <FHead>
           <Title>Com fome?!</Title>
-          <Text>Faça login para saciar sua dieta!</Text>
+          <Text>{isLogin ? "Faça login para saciar sua dieta!" : "Cadastre-se e mate sua fome!"}</Text>
         </FHead>
         <LoginSlider placeLeft={isLogin} />
-        <InputComponent theme={{ color, fonts } as ThemeModel} label="Login" placeholder="@email.com" name={"email"} dispatch={dispatch} bindValue={form.email}/>
-        <InputComponent theme={{ color, fonts } as ThemeModel} label="Senha" placeholder="senha" name={"password"} dispatch={dispatch} bindValue={form.password}/>
+        <InputComponent theme={theme} label="Login" placeholder="@email.com" name={"email"} dispatcher={{ dispatch, actionWithPayload: changeLoginEmail }} value={form.email} />
+        <InputComponent theme={theme} label="Senha" placeholder="senha" name={"password"} dispatcher={{ dispatch, actionWithPayload: changeLoginPassword }} value={form.password} />
+        {!isLogin ?
+          <InputComponent theme={theme} label="Repetir Senha" placeholder="Repetir Senha" name={"repeatedPassword"} dispatcher={{ dispatch, actionWithPayload: changeLoginPassword }} value={form.password} />
+          : ""}
+        {isLogin ?
+          <View style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
+            <CheckboxComponent theme={theme} dispatcher={{ dispatch, actionWithoutPayload: toggleRememberMe }} value={form.rememberMe} label="Lembrar senha" />
+            <Text style={{ letterSpacing: -.5, color: theme.color.primary, alignSelf: "flex-end" }}>Esqueceu a senha?</Text>
+          </View>
+          : ""}
         <StyledButton
           onPress={() => {
-            dispatch(changeTheme());
+            console.log(form)
+            navigation.navigate("Teste")
           }}
         >
-          <ButtonText>Entrar</ButtonText>
+          <ButtonText>{isLogin ? "Entrar" : "Cadastrar-se"}</ButtonText>
         </StyledButton>
         <View style={{ alignItems: "center" }}>
-          <Text>Ainda não possui conta?</Text>
-          <TouchableOpacity onPress={() => dispatch(changeLoginState(false))}><Text style={{ color: color.primary }}>Criar Conta</Text></TouchableOpacity>
+          <Text>{isLogin ? "Ainda não possui conta?" : "Você já tem uma conta?"}</Text>
+          <TouchableOpacity onPress={() => dispatch(changeLoginState(!isLogin))}><Text style={{ color: theme.color.primary }}>{isLogin ? "Criar Conta" : "Fazer Login"}</Text></TouchableOpacity>
         </View>
       </Form>
       <BottomImage source={require("../../../assets/Login/BottomImage.png")} />

@@ -1,4 +1,9 @@
-import { Action, ThunkAction } from "@reduxjs/toolkit";
+import {
+  Action,
+  ActionCreatorWithPayload,
+  ActionCreatorWithoutPayload,
+  ThunkAction,
+} from "@reduxjs/toolkit";
 import { store } from ".";
 
 export type AppDispatch = typeof store.dispatch;
@@ -9,3 +14,9 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+export type Dispatcher = {
+  dispatch: AppDispatch;
+  actionWithoutPayload?: ActionCreatorWithoutPayload<any>;
+  actionWithPayload?: ActionCreatorWithPayload<any, any>;
+};

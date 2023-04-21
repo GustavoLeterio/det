@@ -1,15 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
-import React from "react";
-import { ThemeProvider } from "styled-components/native";
 import { store } from "./src/Store";
 import { Provider } from "react-redux";
-import { LoginTab } from "./src/tabs/home/LoginTab";
-import {
-  useFonts,
-  Roboto_400Regular as font
-} from "@expo-google-fonts/roboto";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import HomeStackNavigator from "./src/HomeStackNavigator/HomeStackNavigator";
 
 export const App = () => {
   return (
@@ -17,7 +11,7 @@ export const App = () => {
       <SafeAreaProvider>
         <SafeAreaView>
           <StatusBar />
-          <LoginTab />
+          <HomeStackNavigator/>
         </SafeAreaView>
       </SafeAreaProvider>
     </Provider>

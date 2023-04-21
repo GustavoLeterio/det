@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "DET",
-    "slug": "DET",
+    "slug": "det",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a29a1981-42e1-4410-b967-356be4c28e58"
+      }
+    },
+    "owner": "gustavoleterio"
   }
 }

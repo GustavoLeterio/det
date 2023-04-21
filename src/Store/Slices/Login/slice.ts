@@ -8,32 +8,41 @@ export const slice = createSlice({
     changeLoginState(state, value) {
       return { ...state, isLogin: value.payload };
     },
-
-    changeLoginValueByKey(state, value) {
-      //value {key,value}
-      if (value.payload.key == "email") {
-        let newState = { ...state };
-        newState.form = { ...state.form, email: value.payload.value };
-        return newState;
-      }
-      if (value.payload.key == "password") {
-        let newState = { ...state };
-        newState.form = { ...state.form, password: value.payload.value };
-        return newState;
-      }
-      if (value.payload.key == "repeatedPassword") {
-        let newState = { ...state };
-        newState.form = {
+    changeLoginEmail(state, value){
+      return {
+        ...state,
+        form: {
           ...state.form,
-          repeatedPassword: value.payload.value,
-        };
-        return newState;
-      }
-      if (value.payload.key == "rememberMe") {
-        let newState = { ...state };
-        newState.form = { ...state.form, rememberMe: value.payload.value };
-        return newState;
-      }
+          email: value.payload,
+        },
+      };
+    },
+    changeLoginPassword(state, value){
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          password: value.payload,
+        },
+      };
+    },
+    changeLoginRepeatedPassword(state, value){
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          repeatedPassword: value.payload,
+        },
+      };
+    },
+    toggleRememberMe(state) {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          rememberMe: !state.form.rememberMe,
+        },
+      };
     },
   },
 });
