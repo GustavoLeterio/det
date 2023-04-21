@@ -7,11 +7,13 @@ import { Text, View } from "react-native";
 const Stack = createNativeStackNavigator();
 
 export default function HomeStackNavigator() {
-  const {Navigator,Screen} = Stack;
+  const { Navigator, Screen } = Stack;
 
   return (
     <NavigationContainer>
-      <Navigator>
+      <Navigator screenOptions={{
+        headerShown: false
+      }}>
         <Screen name="Login" component={LoginTab} />
         <Screen name="Teste" component={Teste} />
       </Navigator>
@@ -19,9 +21,24 @@ export default function HomeStackNavigator() {
   );
 }
 
-function Teste({navigation}:any) {
+function Teste({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
+      <Text>teste</Text>
       <Text>teste</Text>
     </View>
   );
