@@ -1,15 +1,12 @@
 import styled from "styled-components/native";
 import { useAppDispatch } from "../../Store/hooks/useAppDispatch";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
-import { useNavigation } from '@react-navigation/native';
-import { changeTheme } from "../../Store/Slices/Themes/actions";
-import LoginSlider from "../../Components/LoginSlider/LoginSlider";
+import LoginSlider from "../../Components/LoginSliderComponent/LoginSlider";
 import InputComponent from "../../Components/InputComponent/InputComponent";
-import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { View, TouchableOpacity } from "react-native";
 import { changeLoginEmail, changeLoginPassword, changeLoginState, toggleRememberMe } from "../../Store/Slices/Login/actions";
 import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
-import { Action } from "redux";
+import TitleComponent from "../../Components/TitleComponent/TitleComponent";
 
 export const LoginTab = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -28,8 +25,9 @@ export const LoginTab = ({ navigation }: any) => {
     width: 100%;
     display: flex;
     align-items: center;
-    /* borderRadius: 10px; */
+    justify-content: center;
   `;
+
   const Logo = styled.Image`
     margin: 15% 0;
   `;
@@ -45,12 +43,6 @@ export const LoginTab = ({ navigation }: any) => {
     top: -5%;
     background-color: ${theme.color.white};
     elevation: 40;
-  `;
-
-  const Title = styled.Text`
-    font-size: 24px;
-    font-weight: ${theme.fonts.bold};
-    color:${theme.color.primary};
   `;
 
   const Text = styled.Text`
@@ -94,10 +86,10 @@ export const LoginTab = ({ navigation }: any) => {
       </Banner>
       <Form>
         <FHead>
-          <Title>Com fome?!</Title>
+          <TitleComponent theme={theme} text={"Com fome?!"}></TitleComponent>
           <Text>{isLogin ? "Faça login para saciar sua dieta!" : "Cadastre-se e mate sua fome!"}</Text>
         </FHead>
-        <LoginSlider placeLeft={isLogin} />
+        <LoginSlider theme={theme} placeLeft={isLogin} dispatcher={{ dispatch, actionWithPayload: changeLoginState }} />
         <InputComponent theme={theme} label="Login" placeholder="@email.com" name={"email"} dispatcher={{ dispatch, actionWithPayload: changeLoginEmail }} value={form.email} />
         <InputComponent theme={theme} label="Senha" placeholder="senha" name={"password"} dispatcher={{ dispatch, actionWithPayload: changeLoginPassword }} value={form.password} />
         {!isLogin ?
@@ -112,7 +104,7 @@ export const LoginTab = ({ navigation }: any) => {
         <StyledButton
           onPress={() => {
             console.log(form)
-            navigation.navigate("Teste")
+            navigation.navigate("Home")
           }}
         >
           <ButtonText>{isLogin ? "Entrar" : "Cadastrar-se"}</ButtonText>

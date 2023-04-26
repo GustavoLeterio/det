@@ -17,6 +17,10 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export type Dispatcher = {
   dispatch: AppDispatch;
-  actionWithoutPayload?: ActionCreatorWithoutPayload<any>;
-  actionWithPayload?: ActionCreatorWithPayload<any, any>;
+  actionWithoutPayload?:
+    | ActionCreatorWithoutPayload<any>
+    | ActionCreatorWithoutPayload<any>[];
+  actionWithPayload?:
+    | ActionCreatorWithPayload<any, any>
+    | ActionCreatorWithPayload<any, any>[];
 };
