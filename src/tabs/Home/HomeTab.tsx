@@ -8,18 +8,18 @@ import { Nutrients } from "../../Store/Slices/Home/IHome";
 import NutrientButtonComponent from "../../Components/NutrientButtonComponent/NutrientButtonComponent";
 import { changeListOfItems, changeNutrient } from "../../Store/Slices/Home/actions";
 import GridCardComponent from "../../Components/GridCardComponent/GridCardComponent";
+import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 
 export const HomeTab = ({ navigation }: any) => {
     const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
     const { nutrient, items } = useAppSelector((store) => store.home);
-    const { color, fonts } = theme;
 
     const Container = styled.View`
         position: relative;
         display: flex;
-        padding: 48px 32px ;
-        height: 100%;
+        padding: 48px 32px 8px 32px;
+        height: 90%;
         background-color: ${theme.color.white};
         gap:12px;
     `;
@@ -44,7 +44,7 @@ export const HomeTab = ({ navigation }: any) => {
         justify-content: space-between;
     `;
 
-    return (
+    return (<>
         <Container>
             <Header>
                 <Texts>
@@ -70,6 +70,9 @@ export const HomeTab = ({ navigation }: any) => {
             </Buttons>
             <GridCardComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeListOfItems }} items={items} nutrient={nutrient} />
         </Container >
+        <NavbarComponent theme={theme} navigation={navigation}></NavbarComponent>
+    </>
+
     );
 };
 

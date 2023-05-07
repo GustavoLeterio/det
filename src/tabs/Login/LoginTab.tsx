@@ -12,7 +12,6 @@ export const LoginTab = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((store) => store.theme);
   const { isLogin, form } = useAppSelector((store) => store.login);
-
   const Container = styled.View`
     position: relative;
     display: flex;
@@ -103,7 +102,6 @@ export const LoginTab = ({ navigation }: any) => {
           : ""}
         <StyledButton
           onPress={() => {
-            console.log(form)
             navigation.navigate("Home")
           }}
         >
