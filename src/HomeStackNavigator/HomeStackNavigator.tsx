@@ -16,7 +16,7 @@ export default function HomeStackNavigator() {
         headerShown: false
       }}>
         {/* <Screen name="Login" component={LoginTab} /> */}
-        {/* <Screen name="Home" component={HomeTab} /> */}
+        <Screen name="Home" component={HomeTab} />
         <Screen name="Plate" component={PlateTab} />
       </Navigator>
     </NavigationContainer>

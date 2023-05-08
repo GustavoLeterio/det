@@ -6,7 +6,7 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import PlateAndCupComponent from "../../Components/PlateAndCupComponent/PlateAndCupComponent";
 import { changeNutrient } from "../../Store/Slices/Home/actions";
 
-export const PlateTab = ({ navigation }: any) => {
+export const PlateTab = ({ navigation, route }: any) => {
     const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
     const { nutrient, items } = useAppSelector((store) => store.home);
@@ -24,9 +24,9 @@ export const PlateTab = ({ navigation }: any) => {
         <>
             <Container>
                 <HeadingComponent theme={theme} title="Escolha as Quantidades!" subtitle="Revise seu prato, e adicione uma bebida" />
-                <PlateAndCupComponent theme={theme} items={items} nutrient={nutrient} dispatcher={{ dispatch, actionWithPayload:changeNutrient }} />
+                <PlateAndCupComponent navigation={navigation} theme={theme} items={items} nutrient={nutrient} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} />
             </Container>
-            <NavbarComponent theme={theme} navigation={navigation} />
+            <NavbarComponent theme={theme} navigation={navigation} route={route} />
         </>
     );
 };

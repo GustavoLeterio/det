@@ -15,6 +15,7 @@ export interface Home {
 export interface Item {
   id: number;
   name: string;
+  nutrient:Nutrients;
   price: number;
   description: string;
   weightPerGrams: number;

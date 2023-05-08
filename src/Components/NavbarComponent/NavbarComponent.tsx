@@ -2,9 +2,9 @@ import styled from "styled-components/native";
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { Icon } from "@rneui/base";
 
-export const NavbarComponent = ({ navigation, theme }: { navigation: any, theme: ThemeModel }) => {
+export const NavbarComponent = ({ navigation, route, theme }: { navigation: any, route: any, theme: ThemeModel }) => {
     function isActualRoute(test: String) {
-        if (navigation.getState().routeNames[navigation.getState().index] == test) return color.primary
+        if (route.name == test) return color.primary
         else return color.fontGray;
     }
     const { color } = theme;
@@ -31,6 +31,7 @@ export const NavbarComponent = ({ navigation, theme }: { navigation: any, theme:
     const Text = styled.Text<{ test: String }>`
         color:${p => isActualRoute(p.test)};
     `;
+
     return (
         <Container style={{ borderTopWidth: 5, borderTopColor: color.primary }}>
             <Touchable onPress={() => navigation.navigate("Home")}>

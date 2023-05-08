@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import { Icon, Text } from "@rneui/themed";
 import React from "react";
 import { FlatList, View } from "react-native";
-import { mockup } from "./mockup";
+import { mockup } from "../../Mocks/mockup";
 
 interface Props { theme: ThemeModel, nutrient: Nutrients, dispatcher: Dispatcher, items: Item[]}
 class GridCardComponent extends React.Component<Props> {

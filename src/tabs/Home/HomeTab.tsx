@@ -10,11 +10,10 @@ import { changeListOfItems, changeNutrient } from "../../Store/Slices/Home/actio
 import GridCardComponent from "../../Components/GridCardComponent/GridCardComponent";
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 
-export const HomeTab = ({ navigation }: any) => {
+export const HomeTab = ({ navigation,route}: any) => {
     const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
     const { nutrient, items } = useAppSelector((store) => store.home);
-
     const Container = styled.View`
         position: relative;
         display: flex;
@@ -70,7 +69,7 @@ export const HomeTab = ({ navigation }: any) => {
             </Buttons>
             <GridCardComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeListOfItems }} items={items} nutrient={nutrient} />
         </Container >
-        <NavbarComponent theme={theme} navigation={navigation}></NavbarComponent>
+        <NavbarComponent theme={theme} navigation={navigation} route={route}></NavbarComponent>
     </>
 
     );
