@@ -1,13 +1,14 @@
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
-import { Item, Nutrients } from "../../Store/Slices/Home/IHome";
+import { Nutrients } from "../../Store/Slices/Home/IHome";
 import { Dispatcher } from "../../Store/types";
 import styled from "styled-components/native";
 import { Icon, Text } from "@rneui/themed";
 import React from "react";
 import { FlatList, View } from "react-native";
 import { mockup } from "../../Mocks/mockup";
+import { Item, ItemAndWeight, Order } from "../../Store/Slices/Order/IOrder";
 
-interface Props { theme: ThemeModel, nutrient: Nutrients, dispatcher: Dispatcher, items: Item[]}
+interface Props { theme: ThemeModel, nutrient: Nutrients, dispatcher: Dispatcher, items: ItemAndWeight[] }
 class GridCardComponent extends React.Component<Props> {
     getList(): Item[] {
         if (this.props.nutrient == Nutrients.protein) return mockup.protein;
@@ -18,16 +19,16 @@ class GridCardComponent extends React.Component<Props> {
     }
 
     indexOfItem(item: Item): number {
-        return this.props.items.map(i => i.id).indexOf(item.id);
+        return this.props.items.map(i => i.item.id).indexOf(item.id);
     }
 
     isItemPresent(item: Item): boolean {
-        return this.props.items.filter(i => i.id === item.id).length > 0;
+        return this.props.items.filter(i => i.item.id === item.id).length > 0;
     }
 
     toggleItemOnList(item: Item) {
-        let items: Item[] = [...this.props.items];
-        this.isItemPresent(item) ? items.splice(this.indexOfItem(item), 1) : items.push(item);
+        let items: ItemAndWeight[] = [...this.props.items];
+        this.isItemPresent(item) ? items.splice(this.indexOfItem(item), 1) : items.push({item,weight:0});
         const { dispatch, actionWithPayload } = this.props.dispatcher;
         if (actionWithPayload && !Array.isArray(actionWithPayload))
             dispatch(actionWithPayload(items));

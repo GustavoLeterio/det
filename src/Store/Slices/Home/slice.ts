@@ -7,9 +7,6 @@ export const slice = createSlice({
   reducers: {
     changeNutrient(state,value){
       return {...state, nutrient:value.payload}
-    },
-    changeListOfItems(state,value){
-      return {...state, items:value.payload}
-    },
+    }
   },
 });

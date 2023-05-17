@@ -6,14 +6,16 @@ import { View } from "react-native";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import { Nutrients } from "../../Store/Slices/Home/IHome";
 import NutrientButtonComponent from "../../Components/NutrientButtonComponent/NutrientButtonComponent";
-import { changeListOfItems, changeNutrient } from "../../Store/Slices/Home/actions";
+import { changeNutrient } from "../../Store/Slices/Home/actions";
 import GridCardComponent from "../../Components/GridCardComponent/GridCardComponent";
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
+import { changeListOfItems } from "../../Store/Slices/Order/actions";
 
 export const HomeTab = ({ navigation,route}: any) => {
     const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
-    const { nutrient, items } = useAppSelector((store) => store.home);
+    const { nutrient } = useAppSelector((store) => store.home);
+    const { items } = useAppSelector((store) => store.order);
     const Container = styled.View`
         position: relative;
         display: flex;

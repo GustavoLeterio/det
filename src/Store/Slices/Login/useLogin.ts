@@ -9,6 +9,7 @@ export const login: Login = {
     repeatedPassword: "",
     rememberMe: false,
   },
+  token: null,
 };
 
 const inicialState: [Login] = [login];
@@ -24,5 +25,5 @@ export default () => {
   const changeLoginState = () => {};
   const changeLoginValueByKey = () => {};
 
-  return [state, changeLoginState,changeLoginValueByKey];
+  return [state, changeLoginState, changeLoginValueByKey];
 };

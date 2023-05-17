@@ -8,7 +8,7 @@ export const slice = createSlice({
     changeLoginState(state, value) {
       return { ...state, isLogin: value.payload };
     },
-    changeLoginEmail(state, value){
+    changeLoginEmail(state, value) {
       return {
         ...state,
         form: {
@@ -17,7 +17,7 @@ export const slice = createSlice({
         },
       };
     },
-    changeLoginPassword(state, value){
+    changeLoginPassword(state, value) {
       return {
         ...state,
         form: {
@@ -26,7 +26,7 @@ export const slice = createSlice({
         },
       };
     },
-    changeLoginRepeatedPassword(state, value){
+    changeLoginRepeatedPassword(state, value) {
       return {
         ...state,
         form: {
@@ -34,6 +34,15 @@ export const slice = createSlice({
           repeatedPassword: value.payload,
         },
       };
+    },
+    setToken(state, value) {
+      return {
+        ...state,
+        token: value.payload,
+      };
+    },
+    removeToken(state) {
+      return { ...state, token: null };
     },
     toggleRememberMe(state) {
       return {

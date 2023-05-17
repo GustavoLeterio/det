@@ -1,5 +1,3 @@
-import { ImageSourcePropType } from "react-native";
-
 export enum Nutrients {
   protein = "Proteínas",
   carbohidrate = "Carboidratos",
@@ -9,15 +7,4 @@ export enum Nutrients {
 
 export interface Home {
   nutrient: Nutrients;
-  items: Item[];
-}
-
-export interface Item {
-  id: number;
-  name: string;
-  nutrient:Nutrients;
-  price: number;
-  description: string;
-  weightPerGrams: number;
-  image: ImageSourcePropType;
 }

@@ -1,24 +1,24 @@
-import { Keyboard } from 'react-native';
 import styled from "styled-components/native";
 import { Dispatcher } from '../../Store/types';
 import { ThemeModel } from '../../Store/Slices/Themes/IThemes';
-import type { EmitterSubscription } from 'react-native';
 import React from 'react';
+import { EmitterSubscription, Keyboard, KeyboardTypeOptions } from "react-native";
 
-interface Props { theme: ThemeModel, label: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
-// ({ label, name, placeholder, dispatch, bindValue }: Props) =>
+interface Props { type?: KeyboardTypeOptions, id?: number, style?: { width?: number, vPadding?: number }, theme: ThemeModel, label: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
 class InputComponent extends React.Component<Props, { value: string }> {
 
-  state = { value: this.props.value }
+  value: string = this.props.value;
 
   keyboardDidHideSubscription?: EmitterSubscription;
   componentDidMount(): void {
     this.keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       const { dispatch, actionWithPayload } = this.props.dispatcher;
+      var payload: any = this.value;
+      if (this.props.type == "numeric" || this.props.type == "number-pad") payload = this.value.replace(/[^0-9]/g, '');
+      console.log(payload)
+      if (this.props.id) payload = { value: payload, id: this.props.id }
       if (actionWithPayload && !Array.isArray(actionWithPayload)) {
-        setTimeout(() => {
-          dispatch(actionWithPayload(this.state.value));
-        })
+        dispatch(actionWithPayload(payload));
       }
       else
         alert("ERROR: 'ActionWithPayload' NOT INFORMED")
@@ -31,9 +31,8 @@ class InputComponent extends React.Component<Props, { value: string }> {
 
   render() {
     const { color, fonts } = this.props.theme;
-
     const TextInput = styled.TextInput`
-    padding: 10px;
+    padding: ${(this.props.style?.vPadding ?? "10") + "px"};
     width: 100%;
     position: relative;
     display: flex;
@@ -47,7 +46,7 @@ class InputComponent extends React.Component<Props, { value: string }> {
     position: relative;
     display: flex;
     gap: 6px;
-    width: 100%;
+    width: ${(this.props.style?.width ?? "100") + "%"};
   `;
 
     const Text = styled.Text`
@@ -57,13 +56,14 @@ class InputComponent extends React.Component<Props, { value: string }> {
     font-size: 14px;
   `;
     return (
-      <View >
+      <View>
         <Text>{this.props.label}</Text>
         <TextInput
           secureTextEntry={this.props.name == "password"}
           placeholder={this.props.placeholder ?? 'Digite aqui'}
-          onChangeText={text => { this.setState({ value: text }) }}
-          value={this.state.value}
+          onChangeText={text => this.value = text}
+          defaultValue={this.value}
+          keyboardType={this.props.type ?? "default"}
         />
       </View >
     )

@@ -1,6 +1,7 @@
 interface Login {
   isLogin: boolean;
   form: Form;
+  token: string | null;
 }
 
 interface Form {

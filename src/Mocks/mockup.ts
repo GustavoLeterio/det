@@ -1,4 +1,5 @@
-import { Item, Nutrients } from "../Store/Slices/Home/IHome";
+import { Nutrients } from "../Store/Slices/Home/IHome";
+import { Item } from "../Store/Slices/Order/IOrder";
 export const mockup: {
   protein: Item[];
   carbohidrate: Item[];
