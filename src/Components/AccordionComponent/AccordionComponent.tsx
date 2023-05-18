@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { changeNutrient } from '../../Store/Slices/Home/actions';
 import { changeItemWeight, changeListOfItems, toggleAccordion } from '../../Store/Slices/Order/actions';
 import { useAppSelector } from '../../Store/hooks/useAppSelector';
+import { StyleSheet } from 'react-native';
 
 
 interface Props { items: ItemAndWeight[], theme: ThemeModel, nutrient: Nutrients, navigation: any }
@@ -56,30 +57,22 @@ export default function AccordionComponent(props: Props) {
 
     const AccordionContent = styled.View`
         border: 1px solid ${color.lightGray};
-    `
-
-    const ItemView = styled.View`
+        gap:24px;
         display: flex;
-        width: 100%;
-    `
-
-    const Row = styled.View`
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
         padding:10px;
-        padding-top: 4px;
     `
 
     const SpecBlock = styled.View`
-        gap:6px;
+        width: 100%;
+
     `
 
     const Specifications = styled.View`
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
     `
 
 
@@ -99,25 +92,28 @@ export default function AccordionComponent(props: Props) {
                     <Icon name={orders.length > 0 ? isOpen ? "chevron-up" : "chevron-down" : "plus"} type='font-awesome-5' size={18} color={color.white}></Icon>
                 </AccordionHeader>
             </TouchableHighlight>
-            {isOpen ?
-                <AccordionContent>
-                    {orders.map((set, i) =>
-                        <ItemView key={i}>
-                            <Row>
-                                <InputComponent type="number-pad" style={{ width: 40, vPadding: 4 }} theme={props.theme} label="Carne Grelhada" name={props.nutrient} placeholder="Peso" dispatcher={{ dispatch, actionWithPayload: changeItemWeight }} value={`${set.weight}`} id={set.item.id} />
-                                <SpecBlock>
-                                    <Specifications>
-                                        <Text style={{ color: color.fontGray}}> {set.item.price}R$ por 100g</Text>
-                                    </Specifications>
-                                    <Specifications style={{justifyContent:'space-between',paddingTop:6}}>
-                                        <Text style={{ color: color.primary,fontWeight:"800",fontSize:18 }}>{(+set.item.price*(set.weight/100)).toFixed(2)} R$</Text>
-                                        <Icon name={"backspace"} type='font-awesome-5' size={24} color={color.black} onPress={() => { removeItemFromList(set) }}></Icon>
-                                    </Specifications>
-                                </SpecBlock>
-                            </Row>
-                        </ItemView>)
-                    }
-                </AccordionContent> : ""}
-        </Accordion >
+            {isOpen ? orders.map((set, i) =>
+                <AccordionContent key={i}>
+                    <SpecBlock>
+                        <Specifications>
+                            <Text style={{
+                                color: color.fontGray,
+                                fontWeight: "700",
+                                fontSize: 14,
+                                maxWidth: "50%",
+                            }}>{set.item.name}</Text>
+                            <Text style={{ color: color.fontGray, maxWidth: "50%" }}>{set.item.price}R$ por 100g</Text>
+                        </Specifications>
+                        <Specifications style={{ justifyContent: 'space-between', paddingTop: 6 }}>
+                            <InputComponent type="number-pad" style={{ width: 40, vPadding: 4 }} theme={props.theme} name={props.nutrient} placeholder="Peso" dispatcher={{ dispatch, actionWithPayload: changeItemWeight }} value={`${set.weight}`} id={set.item.id} />
+                            <View style={{ display: "flex", flexDirection: 'row', gap: 12, alignItems: 'center', }}>
+                                <Text style={{ color: color.primary, fontWeight: "800", fontSize: 18 }}>{(+set.item.price * (set.weight / 100)).toFixed(2)} R$</Text>
+                                <Icon name={"backspace"} type='font-awesome-5' size={24} color={color.black} onPress={() => { removeItemFromList(set) }}></Icon>
+                            </View>
+                        </Specifications>
+                    </SpecBlock>
+                </AccordionContent>
+            ) : null}
+        </Accordion>
     )
 }

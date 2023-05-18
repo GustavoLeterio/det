@@ -4,7 +4,7 @@ import { ThemeModel } from '../../Store/Slices/Themes/IThemes';
 import React from 'react';
 import { EmitterSubscription, Keyboard, KeyboardTypeOptions } from "react-native";
 
-interface Props { type?: KeyboardTypeOptions, id?: number, style?: { width?: number, vPadding?: number }, theme: ThemeModel, label: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
+interface Props { type?: KeyboardTypeOptions, id?: number, style?: { width?: number, vPadding?: number }, theme: ThemeModel, label?: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
 class InputComponent extends React.Component<Props, { value: string }> {
 
   value: string = this.props.value;
@@ -15,7 +15,6 @@ class InputComponent extends React.Component<Props, { value: string }> {
       const { dispatch, actionWithPayload } = this.props.dispatcher;
       var payload: any = this.value;
       if (this.props.type == "numeric" || this.props.type == "number-pad") payload = this.value.replace(/[^0-9]/g, '');
-      console.log(payload)
       if (this.props.id) payload = { value: payload, id: this.props.id }
       if (actionWithPayload && !Array.isArray(actionWithPayload)) {
         dispatch(actionWithPayload(payload));
@@ -57,7 +56,7 @@ class InputComponent extends React.Component<Props, { value: string }> {
   `;
     return (
       <View>
-        <Text>{this.props.label}</Text>
+        {this.props.label?<Text>{this.props.label}</Text>:""}
         <TextInput
           secureTextEntry={this.props.name == "password"}
           placeholder={this.props.placeholder ?? 'Digite aqui'}
