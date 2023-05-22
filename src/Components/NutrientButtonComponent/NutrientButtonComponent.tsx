@@ -1,13 +1,12 @@
 import styled from "styled-components/native";
-import { Nutrients } from "../../Store/Slices/Home/IHome";
 import { Dispatcher } from "../../Store/types";
 import React from "react";
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { Icon } from "@rneui/themed";
+import { Nutrients } from "../../Utils/Nutrients.enum";
 
 interface Props { theme: ThemeModel, nutrient: Nutrients, icon: string, dispatcher: Dispatcher, value: Nutrients }
 class NutrientButtonComponent extends React.Component<Props, {}> {
-
 
     changeNutrient() {
         const { dispatch, actionWithPayload } = this.props.dispatcher;

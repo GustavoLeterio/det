@@ -1,5 +1,5 @@
-import { Nutrients } from "../Store/Slices/Home/IHome";
 import { Item } from "../Store/Slices/Order/IOrder";
+import { Nutrients } from "../Utils/Nutrients.enum";
 export const mockup: {
   protein: Item[];
   carbohidrate: Item[];
@@ -15,6 +15,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/steak.png"),
       nutrient: Nutrients.protein,
+      macroNutrients: {
+        kcal: 100,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 2,
@@ -24,6 +31,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/steak.png"),
       nutrient: Nutrients.protein,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 3,
@@ -33,6 +47,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/steak.png"),
       nutrient: Nutrients.protein,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 4,
@@ -42,6 +63,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/steak.png"),
       nutrient: Nutrients.protein,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 5,
@@ -51,6 +79,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/steak.png"),
       nutrient: Nutrients.protein,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
   ],
   carbohidrate: [
@@ -62,6 +97,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/tacos.png"),
       nutrient: Nutrients.carbohidrate,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 7,
@@ -71,6 +113,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/tacos.png"),
       nutrient: Nutrients.carbohidrate,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 8,
@@ -80,6 +129,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/tacos.png"),
       nutrient: Nutrients.carbohidrate,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 9,
@@ -89,6 +145,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/tacos.png"),
       nutrient: Nutrients.carbohidrate,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 10,
@@ -98,6 +161,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/tacos.png"),
       nutrient: Nutrients.carbohidrate,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
   ],
   fiber: [
@@ -109,6 +179,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/lettuce.png"),
       nutrient: Nutrients.fiber,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 12,
@@ -118,6 +195,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/lettuce.png"),
       nutrient: Nutrients.fiber,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 13,
@@ -127,6 +211,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/lettuce.png"),
       nutrient: Nutrients.fiber,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 14,
@@ -136,6 +227,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/lettuce.png"),
       nutrient: Nutrients.fiber,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 15,
@@ -145,6 +243,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/lettuce.png"),
       nutrient: Nutrients.fiber,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
   ],
   fat: [
@@ -156,6 +261,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/nuts.png"),
       nutrient: Nutrients.fat,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 17,
@@ -165,6 +277,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/nuts.png"),
       nutrient: Nutrients.fat,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 18,
@@ -174,6 +293,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/nuts.png"),
       nutrient: Nutrients.fat,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 19,
@@ -183,6 +309,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/nuts.png"),
       nutrient: Nutrients.fat,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
     {
       id: 20,
@@ -192,6 +325,13 @@ export const mockup: {
       weightPerGrams: 100,
       image: require("../../assets/Items/nuts.png"),
       nutrient: Nutrients.fat,
+      macroNutrients: {
+        kcal: 200,
+        carbohidrates: 20,
+        protein: 20,
+        fiber: 20,
+        fat: 20,
+      },
     },
   ],
 };

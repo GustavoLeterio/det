@@ -1,5 +1,4 @@
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
-import { Nutrients } from "../../Store/Slices/Home/IHome";
 import styled from "styled-components/native";
 import React, { useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
@@ -7,7 +6,8 @@ import { Icon } from "@rneui/themed";
 import { ItemAndWeight } from "../../Store/Slices/Order/IOrder";
 import { useDispatch } from "react-redux";
 import { changeNutrient } from "../../Store/Slices/Home/actions";
-import { openAccordion } from "../../Store/Slices/Order/actions";
+import { Nutrients } from "../../Utils/Nutrients.enum";
+import { openAccordion } from "../../Store/Slices/Accordion/actions";
 
 interface Props { theme: ThemeModel, nutrient: Nutrients, items: ItemAndWeight[], navigation: any }
 export default function PlateAndCupComponent(props: Props) {
@@ -26,7 +26,7 @@ export default function PlateAndCupComponent(props: Props) {
 
     function handleClick(nutrientPresence: boolean, nutrient: Nutrients) {
         if (nutrientPresence) {
-            dispatch(openAccordion(nutrient))
+            dispatch(openAccordion(nutrient));
         } else {
             dispatch(changeNutrient(nutrient));
             props.navigation.navigate("Home")

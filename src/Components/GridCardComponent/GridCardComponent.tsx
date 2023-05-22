@@ -1,12 +1,12 @@
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
-import { Nutrients } from "../../Store/Slices/Home/IHome";
 import { Dispatcher } from "../../Store/types";
 import styled from "styled-components/native";
 import { Icon, Text } from "@rneui/themed";
 import React from "react";
 import { FlatList, View } from "react-native";
-import { mockup } from "../../Mocks/mockup";
-import { Item, ItemAndWeight, Order } from "../../Store/Slices/Order/IOrder";
+import { mockup } from "../../Mocks/cardapio";
+import { Item, ItemAndWeight } from "../../Store/Slices/Order/IOrder";
+import { Nutrients } from "../../Utils/Nutrients.enum";
 
 interface Props { theme: ThemeModel, nutrient: Nutrients, dispatcher: Dispatcher, items: ItemAndWeight[] }
 class GridCardComponent extends React.Component<Props> {

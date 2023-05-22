@@ -4,21 +4,20 @@ import styled from 'styled-components/native'
 import { ThemeModel } from '../../Store/Slices/Themes/IThemes';
 import { TouchableHighlight, View } from 'react-native';
 import InputComponent from '../InputComponent/InputComponent';
-import { Nutrients } from '../../Store/Slices/Home/IHome';
 import { ItemAndWeight } from '../../Store/Slices/Order/IOrder';
 import { useDispatch } from 'react-redux';
 import { changeNutrient } from '../../Store/Slices/Home/actions';
-import { changeItemWeight, changeListOfItems, toggleAccordion } from '../../Store/Slices/Order/actions';
+import { changeItemWeight, changeListOfItems } from '../../Store/Slices/Order/actions';
 import { useAppSelector } from '../../Store/hooks/useAppSelector';
-import { StyleSheet } from 'react-native';
-
+import { Nutrients } from '../../Utils/Nutrients.enum';
+import { toggleAccordion } from '../../Store/Slices/Accordion/actions';
 
 interface Props { items: ItemAndWeight[], theme: ThemeModel, nutrient: Nutrients, navigation: any }
-export default function AccordionComponent(props: Props) {
+export default function NutrientAccordionComponent(props: Props) {
     //@ts-ignore
-    var isOpen = useAppSelector(store => store.order.openedAccordion)[Object.keys(Nutrients)[Object.values(Nutrients).indexOf(props.nutrient)]]
+    var isOpen = useAppSelector(store => store.accordion)[Object.keys(Nutrients)[Object.values(Nutrients).indexOf(props.nutrient)]]
     const dispatch = useDispatch();
-    const [orders, setOrders] = useState<ItemAndWeight[]>(props.items.filter(set => set.item.nutrient == props.nutrient));
+    const [items, setOrders] = useState<ItemAndWeight[]>(props.items.filter(set => set.item.nutrient == props.nutrient));
     const { color, fonts } = props.theme;
     var title: string = "";
     if (Nutrients.carbohidrate == props.nutrient)
@@ -75,12 +74,10 @@ export default function AccordionComponent(props: Props) {
         max-width: 100%;
     `
 
-
-
     return (
         <Accordion>
             <TouchableHighlight onPress={() => {
-                if (orders.length > 0) {
+                if (items.length > 0) {
                     dispatch(toggleAccordion(props.nutrient));
                     return;
                 }
@@ -89,10 +86,10 @@ export default function AccordionComponent(props: Props) {
             }}>
                 <AccordionHeader>
                     <Title>{title}</Title>
-                    <Icon name={orders.length > 0 ? isOpen ? "chevron-up" : "chevron-down" : "plus"} type='font-awesome-5' size={18} color={color.white}></Icon>
+                    <Icon name={items.length > 0 ? isOpen ? "chevron-up" : "chevron-down" : "plus"} type='font-awesome-5' size={18} color={color.white}></Icon>
                 </AccordionHeader>
             </TouchableHighlight>
-            {isOpen ? orders.map((set, i) =>
+            {isOpen ? items.map((set, i) =>
                 <AccordionContent key={i}>
                     <SpecBlock>
                         <Specifications>
@@ -105,7 +102,7 @@ export default function AccordionComponent(props: Props) {
                             <Text style={{ color: color.fontGray, maxWidth: "50%" }}>{set.item.price}R$ por 100g</Text>
                         </Specifications>
                         <Specifications style={{ justifyContent: 'space-between', paddingTop: 6 }}>
-                            <InputComponent type="number-pad" style={{ width: 40, vPadding: 4 }} theme={props.theme} name={props.nutrient} placeholder="Peso" dispatcher={{ dispatch, actionWithPayload: changeItemWeight }} value={`${set.weight}`} id={set.item.id} />
+                            <InputComponent type="numeric" style={{ width: 40, vPadding: 4 }} theme={props.theme} name={props.nutrient} placeholder="Peso" dispatcher={{ dispatch, actionWithPayload: changeItemWeight }} value={`${set.weight}`} id={set.item.id} />
                             <View style={{ display: "flex", flexDirection: 'row', gap: 12, alignItems: 'center', }}>
                                 <Text style={{ color: color.primary, fontWeight: "800", fontSize: 18 }}>{(+set.item.price * (set.weight / 100)).toFixed(2)} R$</Text>
                                 <Icon name={"backspace"} type='font-awesome-5' size={24} color={color.black} onPress={() => { removeItemFromList(set) }}></Icon>

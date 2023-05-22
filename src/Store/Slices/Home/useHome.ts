@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { Action } from "redux";
-import { Home, Nutrients } from "./IHome";
+import { Home } from "./IHome";
+import { Nutrients } from "../../../Utils/Nutrients.enum";
 
 export const home: Home = {
   nutrient: Nutrients.protein

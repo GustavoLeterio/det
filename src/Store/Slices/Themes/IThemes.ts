@@ -14,6 +14,7 @@ export interface Fonts {
 
 export interface Color {
   primary: string;
+  secondary: string;
   white: string;
   offWhite: string;
   fontGray: string;
@@ -22,5 +23,6 @@ export interface Color {
   lightGray: string;
   writedInput: string;
   fieldset: string;
+  error: string;
 }
 export interface Effects {}

@@ -2,22 +2,30 @@ import styled from "styled-components/native";
 import { Dispatcher } from '../../Store/types';
 import { ThemeModel } from '../../Store/Slices/Themes/IThemes';
 import React from 'react';
-import { EmitterSubscription, Keyboard, KeyboardTypeOptions } from "react-native";
+import { EmitterSubscription, Keyboard, KeyboardTypeOptions, TextInput } from "react-native";
 
-interface Props { type?: KeyboardTypeOptions, id?: number, style?: { width?: number, vPadding?: number }, theme: ThemeModel, label?: string, name: string, placeholder?: string, dispatcher: Dispatcher, value: string }
+interface Props { type?: KeyboardTypeOptions, id?: number, style?: { width?: number, vPadding?: number }, theme: ThemeModel, label?: string, name: string, placeholder?: string, dispatcher: Dispatcher, value?: string }
 class InputComponent extends React.Component<Props, { value: string }> {
 
-  value: string = this.props.value;
+  value: string = this.props.value ?? "";
+  isNumber: boolean = this.props.type == "numeric" || this.props.type == "number-pad";
+  ref: React.RefObject<TextInput>;
+
+  constructor(props: Props) {
+    super(props);
+    this.ref = React.createRef();
+  }
 
   keyboardDidHideSubscription?: EmitterSubscription;
   componentDidMount(): void {
     this.keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       const { dispatch, actionWithPayload } = this.props.dispatcher;
       var payload: any = this.value;
-      if (this.props.type == "numeric" || this.props.type == "number-pad") payload = this.value.replace(/[^0-9]/g, '');
+
       if (this.props.id) payload = { value: payload, id: this.props.id }
       if (actionWithPayload && !Array.isArray(actionWithPayload)) {
         dispatch(actionWithPayload(payload));
+        this.ref.current?.setNativeProps({ text: this.value });
       }
       else
         alert("ERROR: 'ActionWithPayload' NOT INFORMED")
@@ -26,6 +34,15 @@ class InputComponent extends React.Component<Props, { value: string }> {
 
   componentWillUnmount() {
     this.keyboardDidHideSubscription?.remove();
+  }
+
+  setValue(text: string) {
+    if (this.isNumber) {
+      this.value = text.replace(/[^0-9]/g, '');
+      this.ref.current?.setNativeProps({ text: this.value });
+      return;
+    }
+    this.value = text;
   }
 
   render() {
@@ -54,13 +71,16 @@ class InputComponent extends React.Component<Props, { value: string }> {
     width: 100%;
     font-size: 14px;
   `;
+
+
     return (
       <View>
-        {this.props.label?<Text>{this.props.label}</Text>:""}
+        {this.props.label ? <Text>{this.props.label}</Text> : ""}
         <TextInput
+          ref={this.ref}
           secureTextEntry={this.props.name == "password"}
           placeholder={this.props.placeholder ?? 'Digite aqui'}
-          onChangeText={text => this.value = text}
+          onChangeText={text => this.setValue(text)}
           defaultValue={this.value}
           keyboardType={this.props.type ?? "default"}
         />

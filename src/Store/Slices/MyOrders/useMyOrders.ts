@@ -1,13 +1,11 @@
 import { useReducer } from "react";
 import { Action } from "redux";
-import { Order } from "./IOrder";
+import { Order } from "../Order/IOrder";
+import { mockup } from "../../../Mocks/pedidos";
 
-export const order: Order = {
-  items: [],
-  date: "",
-};
+export const myOrders: Order[] = mockup;
 
-const inicialState: [Order] = [order];
+const inicialState: [Order[]] = [myOrders];
 const reducer = (state: any, action: Action) => {
   switch (action.type) {
     case "CHANGE":
@@ -17,8 +15,7 @@ const reducer = (state: any, action: Action) => {
 
 export default () => {
   const [state, dispatch] = useReducer(reducer, inicialState);
-  const changeListOfItems = () => {};
-  const changeItemWeight = () => {};
+  const getItemsFromAPI = () => {};
 
-  return [state, changeListOfItems, changeItemWeight];
+  return [state, getItemsFromAPI];
 };

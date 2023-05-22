@@ -1,9 +1,4 @@
-export enum Nutrients {
-  protein = "Proteínas",
-  carbohidrate = "Carboidratos",
-  fiber = "Fibras",
-  fat = "Gordura",
-}
+import { Nutrients } from "../../../Utils/Nutrients.enum";
 
 export interface Home {
   nutrient: Nutrients;

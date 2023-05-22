@@ -10,6 +10,7 @@ export const themes: { light: ThemeModel; dark: ThemeModel } = {
     name: "dark",
     color: {
       primary: "#0BD618",
+      secondary: "#1B9624",
       white: "#000000",
       offWhite: "#F9F9F9",
       fontGray: "#7C7C7C",
@@ -18,6 +19,7 @@ export const themes: { light: ThemeModel; dark: ThemeModel } = {
       lightGray: "#E6E6E6",
       writedInput: "#7C7C7C",
       fieldset: "#7C7C7C",
+      error: "#E10C0C",
     },
     fonts,
   },
@@ -25,6 +27,7 @@ export const themes: { light: ThemeModel; dark: ThemeModel } = {
     name: "light",
     color: {
       primary: "#0BD618",
+      secondary: "#1B9624",
       white: "#FFFFFF",
       offWhite: "#F9F9F9",
       fontGray: "#7C7C7C",
@@ -33,12 +36,13 @@ export const themes: { light: ThemeModel; dark: ThemeModel } = {
       lightGray: "#E6E6E6",
       writedInput: "#7C7C7C",
       fieldset: "#7C7C7C",
+      error: "#E10C0C",
     },
     fonts,
   },
 };
 
-const inicialState:[ThemeModel] = [themes.light];
+const inicialState: [ThemeModel] = [themes.light];
 const reducer = (state: any, action: Action) => {
   switch (action.type) {
     case "CHANGE":

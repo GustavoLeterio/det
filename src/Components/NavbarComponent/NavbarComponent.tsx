@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { Icon } from "@rneui/base";
+import { useAppSelector } from "../../Store/hooks/useAppSelector";
 
 export const NavbarComponent = ({ navigation, route, theme }: { navigation: any, route: any, theme: ThemeModel }) => {
     function isActualRoute(test: String) {
@@ -8,6 +9,7 @@ export const NavbarComponent = ({ navigation, route, theme }: { navigation: any,
         else return color.fontGray;
     }
     const { color } = theme;
+    const isSomeItemSelected = useAppSelector(store => store.order.items).length > 0;
 
     const Container = styled.View`
     display: flex;
@@ -38,12 +40,12 @@ export const NavbarComponent = ({ navigation, route, theme }: { navigation: any,
                 <Icon size={24} name={"home"} type='font-awesome-5' color={isActualRoute("Home")}></Icon>
                 <Text test="Home">Início</Text>
             </Touchable >
-            <Touchable onPress={() => navigation.navigate("Plate")}>
+            <Touchable style={{ opacity: !isSomeItemSelected ? 0.3 : 1 }} disabled={!isSomeItemSelected} onPress={() => navigation.navigate("Plate")}>
                 <Icon size={24} name={"utensils"} type='font-awesome-5' color={isActualRoute("Plate")}></Icon>
                 <Text test="Plate">Prato</Text>
             </Touchable >
-            <Touchable onPress={() => navigation.navigate("")}>
-                <Icon size={24} name={"scroll"} type='font-awesome-5' color={isActualRoute("")}></Icon>
+            <Touchable onPress={() => navigation.navigate("Orders")}>
+                <Icon size={24} name={"scroll"} type='font-awesome-5' color={isActualRoute("Orders")}></Icon>
                 <Text test="">Pedidos</Text>
             </Touchable >
             <Touchable onPress={() => navigation.navigate("")}>

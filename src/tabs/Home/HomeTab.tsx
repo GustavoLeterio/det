@@ -4,12 +4,12 @@ import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import { Avatar, Text } from '@rneui/themed';
 import { View } from "react-native";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import { Nutrients } from "../../Store/Slices/Home/IHome";
 import NutrientButtonComponent from "../../Components/NutrientButtonComponent/NutrientButtonComponent";
 import { changeNutrient } from "../../Store/Slices/Home/actions";
 import GridCardComponent from "../../Components/GridCardComponent/GridCardComponent";
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 import { changeListOfItems } from "../../Store/Slices/Order/actions";
+import { Nutrients } from "../../Utils/Nutrients.enum";
 
 export const HomeTab = ({ navigation,route}: any) => {
     const dispatch = useAppDispatch();

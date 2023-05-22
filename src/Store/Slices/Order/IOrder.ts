@@ -1,15 +1,10 @@
 import { ImageSourcePropType } from "react-native";
-import { Nutrients } from "../Home/IHome";
-
+import { Nutrients } from "../../../Utils/Nutrients.enum";
 
 export interface Order {
+  id?: number;
   items: ItemAndWeight[];
-  openedAccordion: {
-    carbohidrate: boolean;
-    protein: boolean;
-    fat: boolean;
-    fiber: boolean;
-  };
+  date: string;
 }
 
 export interface ItemAndWeight {
@@ -25,4 +20,13 @@ export interface Item {
   description: string;
   weightPerGrams: number;
   image: ImageSourcePropType;
+  macroNutrients: MacroNutrients;
+}
+
+export interface MacroNutrients {
+  kcal: number;
+  carbohidrates: number;
+  protein: number;
+  fiber: number;
+  fat: number;
 }
