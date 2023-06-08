@@ -12,7 +12,7 @@ export default class CheckboxComponent extends React.Component<Props, { isChecke
     const { dispatch, actionWithoutPayload } = props.dispatcher;
     if (actionWithoutPayload) {
       setTimeout(() => {
-        dispatch(actionWithoutPayload());
+        // dispatch(actionWithoutPayload());
       })
     }
     else

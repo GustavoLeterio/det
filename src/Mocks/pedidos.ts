@@ -90,8 +90,8 @@ export const mockup: Order[] = [
       {
         item: {
           id: 1,
-          name: "Carne Grelhada",
-          price: 9.75,
+          name: "Carne Deliciona",
+          price: 15,
           description: "Carne Gostosinha",
           weightPerGrams: 100,
           image: require("../../assets/Items/steak.png"),

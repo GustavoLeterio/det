@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { order } from "./useOrder";
-import { valueToKey } from "../../../Utils/Nutrients.enum";
 
 export const slice = createSlice({
   name: "order",
