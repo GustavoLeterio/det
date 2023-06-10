@@ -1,21 +1,31 @@
-export const entregadores: {
+export interface Entregador {
   name: string;
   averageTime: string;
   rank: number;
-}[] = [
-    { name: "João Silva", averageTime: "15mins", rank: 1 },
-    { name: "Maria Santos", averageTime: "20mins", rank: 3 },
-    { name: "Pedro Almeida", averageTime: "18mins", rank: 2 },
-    { name: "Ana Souza", averageTime: "22mins", rank: 5 },
-    { name: "Carlos Oliveira", averageTime: "17mins", rank: 4 },
-    { name: "Mariana Costa", averageTime: "19mins", rank: 6 },
-    { name: "Lucas Rodrigues", averageTime: "16mins", rank: 8 },
-    { name: "Laura Pereira", averageTime: "21mins", rank: 7 },
-    { name: "Gabriel Santos", averageTime: "14mins", rank: 9 },
-    { name: "Isabella Silva", averageTime: "23mins", rank: 10 },
-    { name: "Rafael Almeida", averageTime: "12mins", rank: 12 },
-    { name: "Sophia Souza", averageTime: "25mins", rank: 11 },
-    { name: "Bernardo Oliveira", averageTime: "13mins", rank: 13 },
-    { name: "Alice Costa", averageTime: "24mins", rank: 15 },
-    { name: "Gustavo Rodrigues", averageTime: "11mins", rank: 14 }
-  ];
+  month: string;
+}
+const nomes = ["João", "Maria", "José", "Ana", "Pedro", "Mariana", "Carlos", "Julia", "Fernando", "Luana"];
+const sobrenomes = ["Silva", "Santos", "Pereira", "Ferreira", "Gomes", "Rodrigues", "Lima", "Costa", "Almeida", "Nunes"];
+const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+
+const objetos: Entregador[] = [];
+
+for (let i = 0; i < 100; i++) {
+  const nome = nomes[Math.floor(Math.random() * nomes.length)];
+  const sobrenome = sobrenomes[Math.floor(Math.random() * sobrenomes.length)];
+  const averageTime = Math.floor(Math.random() * 50 + 10) + "m";
+  const rank = i + 1;
+  const month = meses[Math.floor(Math.random() * meses.length)];
+
+  const objeto: Entregador = {
+    name: `${nome} ${sobrenome}`,
+    averageTime: averageTime,
+    rank: rank,
+    month: month
+  };
+
+  objetos.push(objeto);
+}
+
+export const entregadores: Entregador[] = objetos

@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { useAppDispatch } from "../../Store/hooks/useAppDispatch";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
@@ -7,7 +6,6 @@ import { ScrollView } from "react-native";
 import OrderAccordionComponent from "../../Components/OrderAccordionComponent/OrderAccordionComponent";
 
 export const OrdersTab = ({ navigation, route }: any) => {
-    const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
     const myOrders = useAppSelector((store) => store.myOrders);
 
