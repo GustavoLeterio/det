@@ -19,15 +19,6 @@ export default function NutrientAccordionComponent(props: Props) {
     const dispatch = useDispatch();
     const [items, setOrders] = useState<ItemAndWeight[]>(props.items.filter(set => set.item.nutrient == props.nutrient));
     const { color, fonts } = props.theme;
-    var title: string = "";
-    if (Nutrients.carbohidrate == props.nutrient)
-        title = "Carboidratos"
-    if (Nutrients.fat == props.nutrient)
-        title = "Gordura"
-    if (Nutrients.fiber == props.nutrient)
-        title = "Fibra"
-    if (Nutrients.protein == props.nutrient)
-        title = "Proteína"
 
     function removeItemFromList(set: ItemAndWeight) {
         const items = [...props.items];
@@ -85,7 +76,7 @@ export default function NutrientAccordionComponent(props: Props) {
                 props.navigation.navigate("Home")
             }}>
                 <AccordionHeader>
-                    <Title>{title}</Title>
+                    <Title>{props.nutrient}</Title>
                     <Icon name={items.length > 0 ? isOpen ? "chevron-up" : "chevron-down" : "plus"} type='font-awesome-5' size={18} color={color.white}></Icon>
                 </AccordionHeader>
             </TouchableHighlight>

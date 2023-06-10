@@ -1,0 +1,674 @@
+From 968a05b395204814ee3953f49b7cb90f039b253e Mon Sep 17 00:00:00 2001
+From: antoniobueno <antoniobueno@ciandt.com>
+Date: Sat, 10 Jun 2023 18:37:55 -0300
+Subject: [PATCH] login and home integration
+
+---
+ .../GridCardComponent/GridCardComponent.tsx   | 105 ++++--
+ src/HomeStackNavigator/HomeStackNavigator.tsx |   6 +-
+ src/Mocks/cardapio.ts                         | 332 +-----------------
+ src/Store/Slices/Login/actions.ts             |   1 +
+ src/Store/Slices/Login/useLogin.ts            |   3 +-
+ src/Store/Slices/Order/IOrder.ts              |   4 +-
+ src/Utils/Nutrients.enum.ts                   |  15 +-
+ src/Utils/index.ts                            |   2 +-
+ src/tabs/Home/HomeTab.tsx                     |   8 +-
+ src/tabs/Login/LoginTab.tsx                   |  11 +-
+ 10 files changed, 105 insertions(+), 382 deletions(-)
+
+diff --git a/src/Components/GridCardComponent/GridCardComponent.tsx b/src/Components/GridCardComponent/GridCardComponent.tsx
+index bba1019..6ac617b 100644
+--- a/src/Components/GridCardComponent/GridCardComponent.tsx
++++ b/src/Components/GridCardComponent/GridCardComponent.tsx
+@@ -2,49 +2,86 @@ import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
+ import { Dispatcher } from "../../Store/types";
+ import styled from "styled-components/native";
+ import { Icon, Text } from "@rneui/themed";
+-import React from "react";
++import React, { useEffect, useState } from "react";
+ import { FlatList, View } from "react-native";
+-import { mockup } from "../../Mocks/cardapio";
+ import { Item, ItemAndWeight } from "../../Store/Slices/Order/IOrder";
+-import { Nutrients } from "../../Utils/Nutrients.enum";
++import { Nutrients, valueToKey } from "../../Utils/Nutrients.enum";
++import axios from "axios";
++import { baseURL } from "../../Utils";
+ 
+ interface Props {
+   theme: ThemeModel;
+   nutrient: Nutrients;
+   dispatcher: Dispatcher;
+   items: ItemAndWeight[];
++
++
+ }
+-class GridCardComponent extends React.Component<Props> {
+-  getList(): Item[] {
+-    if (this.props.nutrient == Nutrients.protein) return mockup.protein;
+-    if (this.props.nutrient == Nutrients.carbohidrate)
+-      return mockup.carbohidrate;
+-    if (this.props.nutrient == Nutrients.fiber) return mockup.fiber;
+-    if (this.props.nutrient == Nutrients.fat) return mockup.fat;
+-    return [];
++export default function GridCardComponent(props: Props) {
++
++  const [data, setData] = useState<Item[]>();
++
++  function getList() {
++    const headers = {
++      "Authorization": `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2ODY0NDI3MTUsImlhdCI6MTY4NjQyNDcxNX0.rdNSmublXMgo7xO9Y_YKjqC-AhDMxB-tKIpOSIxcsxKaFvrjnAqnUSzZ9lYYXa7NLyHD0bCgHznwZ4zA-S7Jjw`,
++      "Content-Type": "application/json",
++    };
++
++    const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
++
++    axios
++      .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
++      .then((res) => {
++        setData(res.data.map((item: any) => {
++           return {
++            id: item.id_aliment.toString(),
++            name: item.aliment_name,
++            nutrient:
++              Nutrients[
++                item.alimentType as "PROTEIN" | "CARBOHYDRATE" | "FIBER" | "FAT"
++              ],
++            price: item.aliment_price,
++            weightPerGrams: item.aliment_weight,
++            image: require("../../../assets/Items/steak.png"),
++            macroNutrients: {
++              kcal: item.aliment_energyvalue,
++              carbohydrates: item.aliment_carbohydrate,
++              protein: item.aliment_protein,
++              fiber: item.aliment_fiber,
++              fat: item.aliment_totalfat,
++            },
++          } as Item;
++        }));
++      })
++      .catch((err) => {
++        console.log(err);
++      });
+   }
+ 
+-  indexOfItem(item: Item): number {
+-    return this.props.items.map((i) => i.item.id).indexOf(item.id);
++  useEffect(() =>{
++    getList()
++  },[])
++
++  function indexOfItem(item: Item): number {
++    return props.items.map((i) => i.item.id).indexOf(item.id);
+   }
+ 
+-  isItemPresent(item: Item): boolean {
+-    return this.props.items.filter((i) => i.item.id === item.id).length > 0;
++  function isItemPresent(item: Item): boolean {
++    return props.items.filter((i) => i.item.id === item.id).length > 0;
+   }
+ 
+-  toggleItemOnList(item: Item) {
+-    let items: ItemAndWeight[] = [...this.props.items];
+-    this.isItemPresent(item)
+-      ? items.splice(this.indexOfItem(item), 1)
++  function toggleItemOnList(item: Item) {
++    let items: ItemAndWeight[] = [...props.items];
++    isItemPresent(item)
++      ? items.splice(indexOfItem(item), 1)
+       : items.push({ item, weight: 0 });
+-    const { dispatch, actionWithPayload } = this.props.dispatcher;
++    const { dispatch, actionWithPayload } = props.dispatcher;
+     if (actionWithPayload && !Array.isArray(actionWithPayload))
+       dispatch(actionWithPayload(items));
+     else alert("ERROR: 'ActionWithPayload' NOT INFORMED");
+   }
+ 
+-  render() {
+-    const { color } = this.props.theme;
++    const { color } = props.theme;
+ 
+     const Card = styled.View`
+       display: flex;
+@@ -80,7 +117,7 @@ class GridCardComponent extends React.Component<Props> {
+ 
+     return (
+       <FlatList
+-        data={this.getList()}
++        data={data}
+         keyExtractor={(item) => item.id.toString()}
+         numColumns={2}
+         renderItem={({ item }) => {
+@@ -88,9 +125,9 @@ class GridCardComponent extends React.Component<Props> {
+             <Card>
+               <Image source={item.image} />
+               <View>
+-                <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+-                <Text style={{ color: color.primary, fontWeight: "bold" }}>
+-                  {String(item.price).replace(".", ",")}R$
++                <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
++                <Text style={{ color: color.primary, fontWeight: 'bold' }}>
++                  {String(item.price).replace('.', ',')}R$
+                 </Text>
+                 <Text style={{ width: 100, fontSize: 12 }}>
+                   Por {item.weightPerGrams}g
+@@ -98,19 +135,21 @@ class GridCardComponent extends React.Component<Props> {
+               </View>
+ 
+               <IconView
+-                onPress={() => this.toggleItemOnList(item)}
++                onPress={() => toggleItemOnList(item)}
+                 style={{
+-                  backgroundColor: this.isItemPresent(item)
++                  backgroundColor: isItemPresent(item)
+                     ? color.primary
+-                    : "transparent",
++                    : 'transparent',
+                 }}
+               >
+                 <Icon
+-                  name={this.isItemPresent(item) ? "check" : "plus"}
++                  name={isItemPresent(item) ? 'check' : 'plus'}
+                   type="font-awesome-5"
+                   size={18}
+-                  color={this.isItemPresent(item) ? color.white : color.black}
+-                ></Icon>
++                  color={
++                    isItemPresent(item) ? color.white : color.black
++                  }
++                />
+               </IconView>
+             </Card>
+           );
+@@ -118,5 +157,3 @@ class GridCardComponent extends React.Component<Props> {
+       />
+     );
+   }
+-}
+-export default GridCardComponent;
+diff --git a/src/HomeStackNavigator/HomeStackNavigator.tsx b/src/HomeStackNavigator/HomeStackNavigator.tsx
+index cb6b630..7983c91 100644
+--- a/src/HomeStackNavigator/HomeStackNavigator.tsx
++++ b/src/HomeStackNavigator/HomeStackNavigator.tsx
+@@ -18,11 +18,11 @@ export default function HomeStackNavigator() {
+       <Navigator screenOptions={{
+         headerShown: false
+       }}>
+-        {/* <Screen name="Login" component={LoginTab} /> */}
+-        {/* <Screen name="Home" component={HomeTab} />
++        <Screen name="Login" component={LoginTab} /> 
++        <Screen name="Home" component={HomeTab} />
+         <Screen name="Plate" component={PlateTab} />
+         <Screen name="Orders" component={OrdersTab} />
+-        <Screen name="Houses" component={HousesTab} /> */}
++        <Screen name="Houses" component={HousesTab} />
+         <Screen name="Ranking" component={RankingTab} />
+       </Navigator>
+     </NavigationContainer>
+diff --git a/src/Mocks/cardapio.ts b/src/Mocks/cardapio.ts
+index d066e24..fbf83ec 100644
+--- a/src/Mocks/cardapio.ts
++++ b/src/Mocks/cardapio.ts
+@@ -6,332 +6,8 @@ export const mockup: {
+   fiber: Item[];
+   fat: Item[];
+ } = {
+-  protein: [
+-    {
+-      id: 1,
+-      name: "Carne Grelhada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/steak.png"),
+-      nutrient: Nutrients.protein,
+-      macroNutrients: {
+-        kcal: 100,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 2,
+-      name: "Carne Gostosa",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/steak.png"),
+-      nutrient: Nutrients.protein,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 3,
+-      name: "Carne Proteinada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/steak.png"),
+-      nutrient: Nutrients.protein,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 4,
+-      name: "Carne Deliciosa",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/steak.png"),
+-      nutrient: Nutrients.protein,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 5,
+-      name: "Carne Bem Passada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/steak.png"),
+-      nutrient: Nutrients.protein,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-  ],
+-  carbohidrate: [
+-    {
+-      id: 6,
+-      name: "Tacos Grelhada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/tacos.png"),
+-      nutrient: Nutrients.carbohidrate,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 7,
+-      name: "Tacos Gostosa",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/tacos.png"),
+-      nutrient: Nutrients.carbohidrate,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 8,
+-      name: "Tacos Proteinada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/tacos.png"),
+-      nutrient: Nutrients.carbohidrate,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 9,
+-      name: "Tacos Deliciosa",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/tacos.png"),
+-      nutrient: Nutrients.carbohidrate,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 10,
+-      name: "Tacos Bem Passada",
+-      price: 9.75,
+-      description: "Carne Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/tacos.png"),
+-      nutrient: Nutrients.carbohidrate,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-  ],
+-  fiber: [
+-    {
+-      id: 11,
+-      name: "Saladinha Temperadinha",
+-      price: 9.75,
+-      description: "Saladinha Temperadinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/lettuce.png"),
+-      nutrient: Nutrients.fiber,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 12,
+-      name: "Saladinha Gostosa",
+-      price: 9.75,
+-      description: "Saladinha Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/lettuce.png"),
+-      nutrient: Nutrients.fiber,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 13,
+-      name: "Saladinha Boa Delicia",
+-      price: 9.75,
+-      description: "Saladinha Boa Delicia",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/lettuce.png"),
+-      nutrient: Nutrients.fiber,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 14,
+-      name: "Saladinha Com Limãozinho",
+-      price: 9.75,
+-      description: "Saladinha Com Limãozinho",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/lettuce.png"),
+-      nutrient: Nutrients.fiber,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 15,
+-      name: "Saladinha Enche bucho",
+-      price: 9.75,
+-      description: "Saladinha Enche bucho",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/lettuce.png"),
+-      nutrient: Nutrients.fiber,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-  ],
+-  fat: [
+-    {
+-      id: 16,
+-      name: "Nozes Temperadinha",
+-      price: 9.75,
+-      description: "Saladinha Temperadinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/nuts.png"),
+-      nutrient: Nutrients.fat,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 17,
+-      name: "Nozes Gostosa",
+-      price: 9.75,
+-      description: "Saladinha Gostosinha",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/nuts.png"),
+-      nutrient: Nutrients.fat,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 18,
+-      name: "Nozes Boa Delicia",
+-      price: 9.75,
+-      description: "Saladinha Boa Delicia",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/nuts.png"),
+-      nutrient: Nutrients.fat,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 19,
+-      name: "Nozes Com Limãozinho",
+-      price: 9.75,
+-      description: "Saladinha Com Limãozinho",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/nuts.png"),
+-      nutrient: Nutrients.fat,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-    {
+-      id: 20,
+-      name: "Nozes Enche bucho",
+-      price: 9.75,
+-      description: "Saladinha Enche bucho",
+-      weightPerGrams: 100,
+-      image: require("../../assets/Items/nuts.png"),
+-      nutrient: Nutrients.fat,
+-      macroNutrients: {
+-        kcal: 200,
+-        carbohidrates: 20,
+-        protein: 20,
+-        fiber: 20,
+-        fat: 20,
+-      },
+-    },
+-  ],
++  protein: [],
++  carbohidrate: [],
++  fiber: [],
++  fat: []
+ };
+diff --git a/src/Store/Slices/Login/actions.ts b/src/Store/Slices/Login/actions.ts
+index 34fb168..d6ed70c 100644
+--- a/src/Store/Slices/Login/actions.ts
++++ b/src/Store/Slices/Login/actions.ts
+@@ -6,4 +6,5 @@ export const {
+   changeLoginPassword,
+   changeLoginRepeatedPassword,
+   toggleRememberMe,
++  setToken
+ } = loginSlice.actions;
+diff --git a/src/Store/Slices/Login/useLogin.ts b/src/Store/Slices/Login/useLogin.ts
+index 8b9aa3b..c1a8338 100644
+--- a/src/Store/Slices/Login/useLogin.ts
++++ b/src/Store/Slices/Login/useLogin.ts
+@@ -24,6 +24,7 @@ export default () => {
+   const [state, dispatch] = useReducer(reducer, inicialState);
+   const changeLoginState = () => {};
+   const changeLoginValueByKey = () => {};
++  const setToken = () => {};
+ 
+-  return [state, changeLoginState, changeLoginValueByKey];
++  return [state, changeLoginState, changeLoginValueByKey, setToken];
+ };
+diff --git a/src/Store/Slices/Order/IOrder.ts b/src/Store/Slices/Order/IOrder.ts
+index 90efe2b..7b0fa86 100644
+--- a/src/Store/Slices/Order/IOrder.ts
++++ b/src/Store/Slices/Order/IOrder.ts
+@@ -17,7 +17,7 @@ export interface Item {
+   name: string;
+   nutrient: Nutrients;
+   price: number;
+-  description: string;
++  // description: string;
+   weightPerGrams: number;
+   image: ImageSourcePropType;
+   macroNutrients: MacroNutrients;
+@@ -25,7 +25,7 @@ export interface Item {
+ 
+ export interface MacroNutrients {
+   kcal: number;
+-  carbohidrates: number;
++  carbohydrates: number;
+   protein: number;
+   fiber: number;
+   fat: number;
+diff --git a/src/Utils/Nutrients.enum.ts b/src/Utils/Nutrients.enum.ts
+index 37c6dad..72080f3 100644
+--- a/src/Utils/Nutrients.enum.ts
++++ b/src/Utils/Nutrients.enum.ts
+@@ -1,8 +1,15 @@
+ export enum Nutrients {
+-  protein = "Proteínas",
+-  carbohidrate = "Carboidratos",
+-  fiber = "Fibras",
+-  fat = "Gordura",
++  PROTEIN = "Proteínas",
++  CARBOHYDRATE = "Carboidratos",
++  FIBER = "Fibras",
++  FAT = "Gordura",
++}
++
++export enum NutrientsResponse {
++  PROTEIN = "PROTEIN",
++  CARBOHYDRATE = "CARBOHYDRATE",
++  FIBER = "FIBER",
++  FAT = "FAT",
+ }
+ 
+ export function valueToKey(value: string): string {
+diff --git a/src/Utils/index.ts b/src/Utils/index.ts
+index fcf6230..069c598 100644
+--- a/src/Utils/index.ts
++++ b/src/Utils/index.ts
+@@ -1 +1 @@
+-export const baseURL = `https://det-api.onrender.com`;
++export const baseURL = 'http://192.168.5.9:8080';
+diff --git a/src/tabs/Home/HomeTab.tsx b/src/tabs/Home/HomeTab.tsx
+index 81017a6..2cc4b40 100644
+--- a/src/tabs/Home/HomeTab.tsx
++++ b/src/tabs/Home/HomeTab.tsx
+@@ -64,10 +64,10 @@ export const HomeTab = ({ navigation,route}: any) => {
+                 </Avatar>
+             </Header>
+             <Buttons>
+-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.protein} icon="drumstick-bite"></NutrientButtonComponent>
+-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.carbohidrate} icon="bread-slice"></NutrientButtonComponent>
+-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.fiber} icon="carrot"></NutrientButtonComponent>
+-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.fat} icon="pizza-slice"></NutrientButtonComponent>
++                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.PROTEIN} icon="drumstick-bite"></NutrientButtonComponent>
++                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.CARBOHYDRATE} icon="bread-slice"></NutrientButtonComponent>
++                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.FIBER} icon="carrot"></NutrientButtonComponent>
++                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.FAT} icon="pizza-slice"></NutrientButtonComponent>
+             </Buttons>
+             <GridCardComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeListOfItems }} items={items} nutrient={nutrient} />
+         </Container >
+diff --git a/src/tabs/Login/LoginTab.tsx b/src/tabs/Login/LoginTab.tsx
+index bdcd885..b92a308 100644
+--- a/src/tabs/Login/LoginTab.tsx
++++ b/src/tabs/Login/LoginTab.tsx
+@@ -4,8 +4,8 @@ import { useAppDispatch } from "../../Store/hooks/useAppDispatch";
+ import { useAppSelector } from "../../Store/hooks/useAppSelector";
+ import LoginSlider from "../../Components/LoginSliderComponent/LoginSlider";
+ import InputComponent from "../../Components/InputComponent/InputComponent";
+-import { View, TouchableOpacity, StyleSheet, ScrollView, TextInput } from "react-native";
+-import { changeLoginEmail, changeLoginPassword, changeLoginState, toggleRememberMe } from "../../Store/Slices/Login/actions";
++import { View, TouchableOpacity, StyleSheet } from "react-native";
++import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, toggleRememberMe } from "../../Store/Slices/Login/actions";
+ import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
+ import TitleComponent from "../../Components/TitleComponent/TitleComponent";
+ import { baseURL } from "../../Utils";
+@@ -109,9 +109,10 @@ export const LoginTab = ({ navigation }: any) => {
+         }
+         <StyledButton
+           onPress={() => {
+-            axios.post(baseURL + "/authenticate", { username: form.email, password: form.password }).then(res => {
+-              console.log(res)
+-            }).catch(err => console.log(err));
++            axios.post(baseURL + "/authenticate", { username: 'string', password: 'string'}).then(res => {
++             dispatch(setToken(res.data))
++             navigation.navigate('Home')
++            }).catch(err => console.log(JSON.stringify(err)));
+           }}
+         >
+           <ButtonText>{isLogin ? "Entrar" : "Cadastrar-se"}</ButtonText>
+-- 
+2.39.0
+

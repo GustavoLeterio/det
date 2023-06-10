@@ -17,7 +17,7 @@ export interface Item {
   name: string;
   nutrient: Nutrients;
   price: number;
-  description: string;
+  // description: string;
   weightPerGrams: number;
   image: ImageSourcePropType;
   macroNutrients: MacroNutrients;
@@ -25,7 +25,7 @@ export interface Item {
 
 export interface MacroNutrients {
   kcal: number;
-  carbohidrates: number;
+  carbohydrates: number;
   protein: number;
   fiber: number;
   fat: number;

@@ -4,8 +4,8 @@ import { useAppDispatch } from "../../Store/hooks/useAppDispatch";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import LoginSlider from "../../Components/LoginSliderComponent/LoginSlider";
 import InputComponent from "../../Components/InputComponent/InputComponent";
-import { View, TouchableOpacity, StyleSheet, ScrollView, TextInput } from "react-native";
-import { changeLoginEmail, changeLoginPassword, changeLoginState, toggleRememberMe } from "../../Store/Slices/Login/actions";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, toggleRememberMe } from "../../Store/Slices/Login/actions";
 import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
 import TitleComponent from "../../Components/TitleComponent/TitleComponent";
 import { baseURL } from "../../Utils";
@@ -109,9 +109,10 @@ export const LoginTab = ({ navigation }: any) => {
         }
         <StyledButton
           onPress={() => {
-            axios.post(baseURL + "/authenticate", { username: form.email, password: form.password }).then(res => {
-              console.log(res)
-            }).catch(err => console.log(err));
+            axios.post(baseURL + "/authenticate", { username: 'string', password: 'string'}).then(res => {
+             dispatch(setToken(res.data))
+             navigation.navigate('Home')
+            }).catch(err => console.log(JSON.stringify(err)));
           }}
         >
           <ButtonText>{isLogin ? "Entrar" : "Cadastrar-se"}</ButtonText>

@@ -64,10 +64,10 @@ export const HomeTab = ({ navigation,route}: any) => {
                 </Avatar>
             </Header>
             <Buttons>
-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.protein} icon="drumstick-bite"></NutrientButtonComponent>
-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.carbohidrate} icon="bread-slice"></NutrientButtonComponent>
-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.fiber} icon="carrot"></NutrientButtonComponent>
-                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.fat} icon="pizza-slice"></NutrientButtonComponent>
+                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.PROTEIN} icon="drumstick-bite"></NutrientButtonComponent>
+                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.CARBOHYDRATE} icon="bread-slice"></NutrientButtonComponent>
+                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.FIBER} icon="carrot"></NutrientButtonComponent>
+                <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.FAT} icon="pizza-slice"></NutrientButtonComponent>
             </Buttons>
             <GridCardComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeListOfItems }} items={items} nutrient={nutrient} />
         </Container >

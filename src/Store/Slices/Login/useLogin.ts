@@ -24,6 +24,7 @@ export default () => {
   const [state, dispatch] = useReducer(reducer, inicialState);
   const changeLoginState = () => {};
   const changeLoginValueByKey = () => {};
+  const setToken = () => {};
 
-  return [state, changeLoginState, changeLoginValueByKey];
+  return [state, changeLoginState, changeLoginValueByKey, setToken];
 };

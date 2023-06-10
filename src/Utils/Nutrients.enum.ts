@@ -1,8 +1,15 @@
 export enum Nutrients {
-  protein = "Proteínas",
-  carbohidrate = "Carboidratos",
-  fiber = "Fibras",
-  fat = "Gordura",
+  PROTEIN = "Proteínas",
+  CARBOHYDRATE = "Carboidratos",
+  FIBER = "Fibras",
+  FAT = "Gordura",
+}
+
+export enum NutrientsResponse {
+  PROTEIN = "PROTEIN",
+  CARBOHYDRATE = "CARBOHYDRATE",
+  FIBER = "FIBER",
+  FAT = "FAT",
 }
 
 export function valueToKey(value: string): string {

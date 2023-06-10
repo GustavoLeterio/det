@@ -6,4 +6,5 @@ export const {
   changeLoginPassword,
   changeLoginRepeatedPassword,
   toggleRememberMe,
+  setToken
 } = loginSlice.actions;
