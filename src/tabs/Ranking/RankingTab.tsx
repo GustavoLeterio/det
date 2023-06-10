@@ -1,11 +1,7 @@
 import styled from "styled-components/native";
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import PlateAndCupComponent from "../../Components/PlateAndCupComponent/PlateAndCupComponent";
-import { ScrollView, View } from "react-native";
-import MacroNutrientsComponent from "../../Components/MacroNutrientsComponent/MacroNutrientsComponent";
-import NutrientAccordionComponent from "../../Components/NutrientAccordionComponent/NutrientAccordionComponent";
-import { Nutrients } from "../../Utils/Nutrients.enum";
+import { View } from "react-native";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import { Text } from "@rneui/base";
 
