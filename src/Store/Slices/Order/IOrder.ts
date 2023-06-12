@@ -5,6 +5,7 @@ export interface Order {
   id?: number;
   items: ItemAndWeight[];
   date: string;
+  endereço?:number;
 }
 
 export interface ItemAndWeight {

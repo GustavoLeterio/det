@@ -13,5 +13,9 @@ export const slice = createSlice({
       state.items[pos].weight = value.payload.value;
       return state;
     },
+    setAdress(state, value) {
+      state.endereço = value.payload;
+      return state;
+    },
   },
 });

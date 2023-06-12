@@ -12,7 +12,7 @@ export enum NutrientsResponse {
   FAT = "FAT",
 }
 
-export function valueToKey(value: string): string {
+export function valueToKey(value: Nutrients): string {
   //@ts-ignore
   return Object.keys(Nutrients)[Object.values(Nutrients).indexOf(value)];
 }

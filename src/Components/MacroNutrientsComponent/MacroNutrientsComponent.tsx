@@ -11,7 +11,7 @@ export default function MacroNutrientsComponent(props: { items: ItemAndWeight[] 
     const [values, setValues] = useState<MacroNutrients>(() => {
         let macros: MacroNutrients = {
             kcal: 0,
-            carbohidrates: 0,
+            carbohydrates: 0,
             protein: 0,
             fiber: 0,
             fat: 0,
@@ -19,7 +19,7 @@ export default function MacroNutrientsComponent(props: { items: ItemAndWeight[] 
         props.items.forEach((itemSet: ItemAndWeight) => {
             macros = {
                 kcal: macros.kcal + (itemSet.weight * itemSet.item.macroNutrients.kcal) / 100,
-                carbohidrates: macros.carbohidrates + (itemSet.weight * itemSet.item.macroNutrients.carbohidrates) / 100,
+                carbohydrates: macros.carbohydrates + (itemSet.weight * itemSet.item.macroNutrients.carbohydrates) / 100,
                 protein: macros.protein + (itemSet.weight * itemSet.item.macroNutrients.protein) / 100,
                 fiber: macros.fiber + (itemSet.weight * itemSet.item.macroNutrients.fiber) / 100,
                 fat: macros.fat + (itemSet.weight * itemSet.item.macroNutrients.fat) / 100
@@ -52,7 +52,7 @@ export default function MacroNutrientsComponent(props: { items: ItemAndWeight[] 
         <Grid>
             <Text style={{ fontSize: 20, marginBottom: 8,maxWidth:"100%" }}>Calorias {values.kcal}Kcal</Text>
             <Row>
-                <Text>Carboidratos: {values.carbohidrates}g</Text>
+                <Text>Carboidratos: {values.carbohydrates}g</Text>
                 <Text>Proteínas: {values.protein}g</Text>
             </Row>
 

@@ -17,8 +17,9 @@ const reducer = (state: any, action: Action) => {
 
 export default () => {
   const [state, dispatch] = useReducer(reducer, inicialState);
-  const changeListOfItems = () => {};
-  const changeItemWeight = () => {};
+  const changeListOfItems = () => { };
+  const changeItemWeight = () => { };
+  const setAdress = () => { };
 
-  return [state, changeListOfItems, changeItemWeight];
+  return [state, changeListOfItems, changeItemWeight, setAdress];
 };

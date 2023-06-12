@@ -2,7 +2,7 @@ import { Icon } from "@rneui/themed";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
-import { TouchableWithoutFeedback, View } from "react-native";
+import { TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { useDispatch } from "react-redux";
 import {
   changePrimaryHouse,
@@ -11,16 +11,19 @@ import {
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import { changeTempo } from "../../Store/Slices/House/actions";
 import HouseFormsComponent from "../HouseFormsComponent/HouseFormsComponent";
+import { setAdress } from "../../Store/Slices/Order/actions";
 
 interface Props {
   house?: House;
   theme: ThemeModel;
   index: number;
+  toSelect?: boolean;
 }
 export default function HousesAccordionComponent({
   house,
   theme,
   index,
+  toSelect = false,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -74,11 +77,13 @@ export default function HousesAccordionComponent({
 
   return (
     <Accordion>
-      <TouchableWithoutFeedback
+      <TouchableOpacity
         onPress={() => {
-          setIsOpen(!isOpen);
-          dispatch(handleAccordions(index));
-          console.log("secondary")
+          if (toSelect) dispatch(setAdress(house?.id));
+          else {
+            setIsOpen(!isOpen);
+            dispatch(handleAccordions(index));
+          }
         }}
       >
         <AccordionHeader>
@@ -93,26 +98,30 @@ export default function HousesAccordionComponent({
                 ></Icon>
                 <Title>{house.name}</Title>
               </AccordionHeaderBlock>
-              <AccordionHeaderBlock>
-                <Icon
-                  name={"star"}
-                  onPress={() => {
-                    console.log("primary")
-                    dispatch(changePrimaryHouse(house));
-                  }}
-                  solid={house.isPrimary}
-                  type="font-awesome-5"
-                  size={20}
-                  color={color.fontColor}
-                ></Icon>
-                <Icon
-                  name={isOpen ? "times" : "edit"}
-                  type="font-awesome-5"
-                  size={isOpen ? 24 : 20}
-                  solid
-                  color={color.fontColor}
-                ></Icon>
-              </AccordionHeaderBlock>
+              {!toSelect ? (
+                <AccordionHeaderBlock>
+                  <Icon
+                    name={"star"}
+                    onPress={() => {
+                      console.log("primary");
+                      dispatch(changePrimaryHouse(house));
+                    }}
+                    solid={house.isPrimary}
+                    type="font-awesome-5"
+                    size={20}
+                    color={color.fontColor}
+                  ></Icon>
+                  <Icon
+                    name={isOpen ? "times" : "edit"}
+                    type="font-awesome-5"
+                    size={isOpen ? 24 : 20}
+                    solid
+                    color={color.fontColor}
+                  ></Icon>
+                </AccordionHeaderBlock>
+              ) : (
+                <></>
+              )}
             </>
           ) : !isOpen ? (
             <AccordionHeaderBlock
@@ -153,8 +162,8 @@ export default function HousesAccordionComponent({
             </>
           )}
         </AccordionHeader>
-      </TouchableWithoutFeedback>
-      {isOpen ? (
+      </TouchableOpacity>
+      {isOpen && !toSelect ? (
         <AccordionContent>
           <HouseFormsComponent isNew={!house} theme={theme} index={index} />
         </AccordionContent>

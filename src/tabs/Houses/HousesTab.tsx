@@ -16,9 +16,7 @@ export const HousesTab = ({ navigation, route }: any) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((store) => store.theme);
   const myHouses = useAppSelector((store) => store.myHouses);
-  const { states } = useAppSelector(
-    (store) => store.axiosGlobalRequests
-  );
+  const { states } = useAppSelector((store) => store.axiosGlobalRequests);
   useEffect(() => {
     if (states.length == 0)
       axios
@@ -51,15 +49,6 @@ export const HousesTab = ({ navigation, route }: any) => {
     gap: 8px;
   `;
 
-  const NewItem = styled.View`
-    width: 100%;
-    border: 1px solid ${theme.color.lightGray};
-    border-radius: 4px;
-    padding: 16px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  `;
   return (
     <>
       <Container>

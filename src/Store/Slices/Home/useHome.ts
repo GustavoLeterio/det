@@ -4,7 +4,7 @@ import { Home } from "./IHome";
 import { Nutrients } from "../../../Utils/Nutrients.enum";
 
 export const home: Home = {
-  nutrient: Nutrients.protein
+  nutrient: Nutrients.PROTEIN
 };
 
 const inicialState: [Home] = [home];

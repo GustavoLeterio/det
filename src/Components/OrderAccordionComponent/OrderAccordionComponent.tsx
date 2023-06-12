@@ -198,6 +198,7 @@ export default function OrderAccordionComponent({
           <StyledButton
             onPress={() => {
               navigation.navigate("Plate");
+              console.log(order.items)
               dispatch(changeListOfItems(order.items));
             }}
           >
