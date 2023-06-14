@@ -8,11 +8,8 @@ export const slice = createSlice({
   initialState: myHouses,
   reducers: {
     setHouses(state, payload: { payload: House[] }) {
-
       state.houses = payload.payload;
-
       return state
-
     },
     addHouse(state, payload: { payload: House }) {
       state.houses = [...state.houses, payload.payload];

@@ -5,7 +5,7 @@ export interface Order {
   id?: number;
   items: ItemAndWeight[];
   date: string;
-  endereço?:number;
+  endereco?:number;
 }
 
 export interface ItemAndWeight {
@@ -18,7 +18,6 @@ export interface Item {
   name: string;
   nutrient: Nutrients;
   price: number;
-  // description: string;
   weightPerGrams: number;
   image: ImageSourcePropType;
   macroNutrients: MacroNutrients;

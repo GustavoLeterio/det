@@ -2,14 +2,12 @@ import { ThemeModel } from "../../Store/Slices/Themes/IThemes";
 import { Dispatcher } from "../../Store/types";
 import styled from "styled-components/native";
 import { Icon, Text } from "@rneui/themed";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, View } from "react-native";
 import { Item, ItemAndWeight } from "../../Store/Slices/Order/IOrder";
-import { Nutrients, valueToKey } from "../../Utils/Nutrients.enum";
-import axios from "axios";
-import { baseURL } from "../../Utils";
+import { Nutrients } from "../../Utils/Nutrients.enum";
 import { useAppSelector } from "../../Store/hooks/useAppSelector";
-import { store } from "../../Store";
+import { mockup } from "../../Mocks/cardapio";
 
 interface Props {
   theme: ThemeModel;
@@ -22,92 +20,33 @@ export default function GridCardComponent(props: Props) {
 
   const [data, setData] = useState<Item[]>();
 
-  useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
+  function getList(): Item[] {
+    if (props.nutrient == Nutrients.PROTEIN) return mockup.protein;
+    if (props.nutrient == Nutrients.CARBOHYDRATE) return mockup.carbohidrate;
+    if (props.nutrient == Nutrients.FIBER) return mockup.fiber;
+    if (props.nutrient == Nutrients.FAT) return mockup.fat;
+    return [];
+  }
 
-    const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
-
-    // setData(
-    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
-    //     return {
-    //       id: ((i+1) * props.nutrient.length),
-    //       name: props.nutrient,
-    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
-    //       price: 4.5,
-    //       weightPerGrams: 100,
-    //       image: require("../../../assets/Items/steak.png"),
-    //       macroNutrients: {
-    //         kcal: 100,
-    //         carbohydrates: 20,
-    //         protein: 20,
-    //         fiber: 4,
-    //         fat: 4,
-    //       },
-    //     } as Item;
-    //   })
-    // );
-
-    axios
-      .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
-      .then((res) => {
-
-        
-    console.log(data);
-    setData(
-      res.data.map((item: any) => {
-        return {
-          id: item.id_aliment.toString(),
-          name: item.aliment_name,
-          nutrient:
-            Nutrients[
-              item.alimentType as
-                | "PROTEIN"
-                | "CARBOHYDRATE"
-                | "FIBER"
-                | "FAT"
-            ],
-          price: item.aliment_price,
-          weightPerGrams: item.aliment_weight,
-          image: require("../../../assets/Items/steak.png"),
-          macroNutrients: {
-            kcal: item.aliment_energyvalue,
-            carbohydrates: item.aliment_carbohydrate,
-            protein: item.aliment_protein,
-            fiber: item.aliment_fiber,
-            fat: item.aliment_totalfat,
-          },
-        } as Item;
-      })
-    );
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }, []);
-
-
-      // setData(
-    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
-    //     return {
-    //       id: ((i+1) * props.nutrient.length),
-    //       name: props.nutrient,
-    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
-    //       price: 4.5,
-    //       weightPerGrams: 100,
-    //       image: require("../../../assets/Items/steak.png"),
-    //       macroNutrients: {
-    //         kcal: 100,
-    //         carbohydrates: 20,
-    //         protein: 20,
-    //         fiber: 4,
-    //         fat: 4,
-    //       },
-    //     } as Item;
-    //   })
-    // );
+  // setData(
+  //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
+  //     return {
+  //       id: ((i+1) * props.nutrient.length),
+  //       name: props.nutrient,
+  //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
+  //       price: 4.5,
+  //       weightPerGrams: 100,
+  //       image: require("../../../assets/Items/steak.png"),
+  //       macroNutrients: {
+  //         kcal: 100,
+  //         carbohydrates: 20,
+  //         protein: 20,
+  //         fiber: 4,
+  //         fat: 4,
+  //       },
+  //     } as Item;
+  //   })
+  // );
 
   function indexOfItem(item: Item): number {
     return props.items.map((i) => i.item.id).indexOf(item.id);
@@ -165,7 +104,7 @@ export default function GridCardComponent(props: Props) {
 
   return (
     <FlatList
-      data={data}
+      data={getList()}
       keyExtractor={(item) => item.id.toString()}
       numColumns={2}
       renderItem={({ item }) => {

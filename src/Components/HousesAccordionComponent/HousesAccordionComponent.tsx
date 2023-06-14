@@ -103,7 +103,6 @@ export default function HousesAccordionComponent({
                   <Icon
                     name={"star"}
                     onPress={() => {
-                      console.log("primary");
                       dispatch(changePrimaryHouse(house));
                     }}
                     solid={house.isPrimary}
@@ -127,7 +126,6 @@ export default function HousesAccordionComponent({
             <AccordionHeaderBlock
               style={{
                 width: "100%",
-                backgroundColor: "red",
                 justifyContent: "center",
               }}
             >

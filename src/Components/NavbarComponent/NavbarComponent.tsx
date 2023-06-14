@@ -97,11 +97,11 @@ export const NavbarComponent = ({
       <Touchable onPress={() => navigation.navigate("Houses")}>
         <Icon
           size={24}
-          name={"user-alt"}
+          name={"map-marker-alt"}
           type="font-awesome-5"
           color={isActualRoute("Houses")}
         ></Icon>
-        <Text test="Houses">Perfil</Text>
+        <Text test="Houses">Casas</Text>
       </Touchable>
     </Container>
   ) : (

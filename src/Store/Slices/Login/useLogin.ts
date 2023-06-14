@@ -8,6 +8,7 @@ export const login: Login = {
     password: "",
     repeatedPassword: "",
     rememberMe: false,
+    userName: "Usuário"
   },
   token: null,
   userId: ""
@@ -23,9 +24,9 @@ const reducer = (state: any, action: Action) => {
 
 export default () => {
   const [state, dispatch] = useReducer(reducer, inicialState);
-  const changeLoginState = () => {};
-  const changeLoginValueByKey = () => {};
-  const setToken = () => {};
+  const changeLoginState = () => { };
+  const changeLoginValueByKey = () => { };
+  const setToken = () => { };
 
   return [state, changeLoginState, changeLoginValueByKey, setToken];
 };

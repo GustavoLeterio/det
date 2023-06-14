@@ -5,8 +5,20 @@ export const slice = createSlice({
   name: "login",
   initialState: login,
   reducers: {
+    resetState() {
+      return login;
+    },
+    changeUserName(state, value) {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          userName: value.payload,
+        },
+      };
+    },
     changeLoginState(state, value) {
-      return { ...state, isLogin: value.payload };
+      return { ...state, isLogin: value.payload, form: { ...state.form, email: "", password: "" } };
     },
     changeLoginEmail(state, value) {
       return {
@@ -50,12 +62,12 @@ export const slice = createSlice({
     removeToken(state) {
       return { ...state, token: null };
     },
-    toggleRememberMe(state) {
+    toggleRememberMe(state,paylaod) {
       return {
         ...state,
         form: {
           ...state.form,
-          rememberMe: !state.form.rememberMe,
+          rememberMe:paylaod.payload,
         },
       };
     },

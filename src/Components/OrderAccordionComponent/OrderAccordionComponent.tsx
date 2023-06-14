@@ -134,7 +134,7 @@ export default function OrderAccordionComponent({
             <Title>Pedido {order.id}#</Title>
           </AccordionHeaderBlock>
           <AccordionHeaderBlock>
-            <Date>26/06/2003 16:48</Date>
+            <Date>{order.date}</Date>
             <Icon
               name={isOpen ? "chevron-up" : "chevron-down"}
               type="font-awesome-5"

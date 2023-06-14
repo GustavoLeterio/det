@@ -11,45 +11,34 @@ import { openAccordion } from "../../Store/Slices/Accordion/actions";
 import NutrientAccordionComponent from "../../Components/NutrientAccordionComponent/NutrientAccordionComponent";
 import { Nutrients } from "../../Utils/Nutrients.enum";
 import HousesAccordionComponent from "../../Components/HousesAccordionComponent/HousesAccordionComponent";
-import axios from "axios";
-import { baseURL } from "../../Utils";
+import { newOrder } from "../../Store/Slices/MyOrders/actions";
+import { resetOrder, setAdress } from "../../Store/Slices/Order/actions";
 
 export const PlateTab = ({ navigation, route }: any) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((store) => store.theme);
   const { nutrient } = useAppSelector((store) => store.home);
-  const { items, endereço } = useAppSelector((store) => store.order);
+  const { items, endereco } = useAppSelector((store) => store.order);
   const [modalVisible, setModalVisible] = useState(false);
   const myHouses = useAppSelector((store) => store.myHouses);
-  const { token, userId  } = useAppSelector((store) => store.login);
-
+  const myOrders = useAppSelector((store) => store.myOrders);
 
   useEffect(() => {
     setModalVisible(false);
-
-    if(modalVisible){
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-
-      const data = {
-        id_user: userId,
-        deliver_adress: "1",
-        items: items.map((item) => {
-          return {
-            id: item.item.id,
-            weight: item.weight,
-            actualPricePerKilo: item.item.price,
-          };
-        }),
-      };
-  
-      axios.post(baseURL + '/api/v1/create/request', data , {headers} ).then((res) => {
-        console.log(res)
-      })
+    if (endereco) {
+      dispatch(
+        newOrder({
+          id: myOrders.length + 1,
+          items: items,
+          date: new Date().toLocaleDateString(),
+          endereco,
+        })
+      );
+      dispatch(resetOrder());
+      navigation.navigate("Orders");
     }
-  }, [endereço]);
+    dispatch(setAdress(undefined));
+  }, [endereco]);
 
   useEffect(() => {
     if (items.length == 0) {

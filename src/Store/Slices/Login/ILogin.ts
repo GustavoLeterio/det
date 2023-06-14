@@ -10,4 +10,5 @@ interface Form {
   password: string;
   repeatedPassword: string;
   rememberMe: boolean;
+  userName:string;
 }

@@ -62,7 +62,6 @@ export default function HouseFormsComponent({
       .replace(/[\u0300-\u036f]/g, "")
       .replace(" ", "-")
       .toLowerCase();
-    console.log("Correção do nome:", city);
     axios
       .get(
         `https://servicodados.ibge.gov.br/api/v1/localidades/municipios/${city}`
@@ -103,7 +102,6 @@ export default function HouseFormsComponent({
           return;
         }
         if (temporaryHouse.cep.length != 9) {
-          console.log(temporaryHouse.cep.length);
           alert("Opa, o CEP está incorreto!");
           return;
         }

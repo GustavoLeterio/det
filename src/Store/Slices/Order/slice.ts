@@ -14,8 +14,11 @@ export const slice = createSlice({
       return state;
     },
     setAdress(state, value) {
-      state.endereço = value.payload;
+      state.endereco = value.payload;
       return state;
     },
+    resetOrder() {
+      return order;
+    }
   },
 });

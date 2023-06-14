@@ -10,11 +10,13 @@ import GridCardComponent from "../../Components/GridCardComponent/GridCardCompon
 import { NavbarComponent } from "../../Components/NavbarComponent/NavbarComponent";
 import { changeListOfItems } from "../../Store/Slices/Order/actions";
 import { Nutrients } from "../../Utils/Nutrients.enum";
+import { Icon } from "@rneui/base";
 
 export const HomeTab = ({ navigation,route}: any) => {
     const dispatch = useAppDispatch();
     const theme = useAppSelector((store) => store.theme);
     const { nutrient } = useAppSelector((store) => store.home);
+    const { form } = useAppSelector((store) => store.login);
     const { items } = useAppSelector((store) => store.order);
     const Container = styled.View`
         position: relative;
@@ -50,18 +52,14 @@ export const HomeTab = ({ navigation,route}: any) => {
             <Header>
                 <Texts>
                     <View>
-                        <Text style={{ fontSize: 18 }}>Olá, usuario!!👋</Text>
+                        <Text style={{ fontSize: 18 }}>Olá, {form.userName}!!👋</Text>
                         <Text>O que vai pedir hoje?</Text>
                     </View>
                     <HeadingComponent theme={theme} title="Escolha os Alimentos!" subtitle="Monte seu prato com as categorias abaixo" />
                 </Texts>
-                <Avatar
-                    size={48}
-                    rounded
-                    onPress={() => { alert("bora toma uma?") }}
-                    source={require("../../../assets/favicon.png")}
-                >
-                </Avatar>
+                <Icon onPress={()=>{
+                    navigation.navigate("Login");
+                }} size={32} name={"sign-out-alt"} type='font-awesome-5' color={theme.color.fontColor}></Icon>
             </Header>
             <Buttons>
                 <NutrientButtonComponent theme={theme} dispatcher={{ dispatch, actionWithPayload: changeNutrient }} value={nutrient} nutrient={Nutrients.PROTEIN} icon="drumstick-bite"></NutrientButtonComponent>

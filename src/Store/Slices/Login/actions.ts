@@ -5,6 +5,8 @@ export const {
   changeLoginEmail,
   changeLoginPassword,
   changeLoginRepeatedPassword,
+  resetState,
+  changeUserName,
   toggleRememberMe,
   setToken,
   setUserId
