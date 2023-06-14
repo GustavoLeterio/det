@@ -3,7 +3,7 @@ import { Action } from "redux";
 import { Order } from "../Order/IOrder";
 import { mockup } from "../../../Mocks/pedidos";
 
-export const myOrders: Order[] = mockup;
+export const myOrders: Order[] = [];
 
 const inicialState: [Order[]] = [myOrders];
 const reducer = (state: any, action: Action) => {

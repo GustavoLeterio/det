@@ -4,7 +4,7 @@ import { mockup } from "../../../Mocks/house";
 import { MyHouses } from "./IMyHouses";
 
 export const myHouses: MyHouses = {
-  houses: mockup,
+  houses: [],
   opennedAccordionPos: -2,
 };
 

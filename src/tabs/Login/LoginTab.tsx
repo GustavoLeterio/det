@@ -191,8 +191,8 @@ export const LoginTab = ({ navigation }: any) => {
             //  dispatch(setUserId(res.data.userId))
             if (isLogin) {
               if (
-                ((form.email = "antonioaclb00@gmail.com"),
-                (form.password = "12345"))
+                form.email == "antonioaclb00@gmail.com" &&
+                form.password == "12345"
               )
                 navigation.navigate("Home");
               else alert("Opa, login incorreto, tente novamente!");
