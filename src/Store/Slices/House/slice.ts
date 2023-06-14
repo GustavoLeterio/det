@@ -6,6 +6,10 @@ export const slice = createSlice({
   name: "house",
   initialState: house,
   reducers: {
+    setHouseID(state, payload) {
+      state.id = payload.payload + 1
+      return state;
+    },
     changeName(state, payload) {
       state.name = payload.payload
       return state;

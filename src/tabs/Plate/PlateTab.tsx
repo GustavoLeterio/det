@@ -26,6 +26,7 @@ export const PlateTab = ({ navigation, route }: any) => {
   useEffect(() => {
     setModalVisible(false);
     if (endereco) {
+      console.log(endereco)
       dispatch(
         newOrder({
           id: myOrders.length + 1,

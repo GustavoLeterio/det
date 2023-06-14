@@ -14,6 +14,7 @@ export const slice = createSlice({
       return state;
     },
     setAdress(state, value) {
+      console.log("adress", value.payload);
       state.endereco = value.payload;
       return state;
     },

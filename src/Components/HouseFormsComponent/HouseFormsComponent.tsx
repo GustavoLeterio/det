@@ -19,8 +19,10 @@ import {
   changeCep,
   changeGarden,
   changeTempo,
+  setHouseID,
 } from "../../Store/Slices/House/actions";
 import axios from "axios";
+import { myHouses } from "../../Store/Slices/MyHouses/useMyHouses";
 
 interface Props {
   theme: ThemeModel;
@@ -55,7 +57,6 @@ export default function HouseFormsComponent({
   }, []);
 
   const handleForm = () => {
-    console.log(temporaryHouse)
     const city = temporaryHouse.city
       .trim()
       .normalize("NFD")
