@@ -23,67 +23,91 @@ export default function GridCardComponent(props: Props) {
   const [data, setData] = useState<Item[]>();
 
   useEffect(() => {
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    //   "Content-Type": "application/json",
-    // };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-    // const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
+    const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
 
-    // axios
-    //   .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
-    //   .then((res) => {
-    setData(
-      ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
-        return {
-          id: ((i+1) * props.nutrient.length),
-          name: props.nutrient,
-          nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
-          price: 4.5,
-          weightPerGrams: 100,
-          image: require("../../../assets/Items/steak.png"),
-          macroNutrients: {
-            kcal: 100,
-            carbohydrates: 20,
-            protein: 20,
-            fiber: 4,
-            fat: 4,
-          },
-        } as Item;
-      })
-    );
-    console.log(data);
     // setData(
-    //   res.data.map((item: any) => {
+    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
     //     return {
-    //       id: item.id_aliment.toString(),
-    //       name: item.aliment_name,
-    //       nutrient:
-    //         Nutrients[
-    //           item.alimentType as
-    //             | "PROTEIN"
-    //             | "CARBOHYDRATE"
-    //             | "FIBER"
-    //             | "FAT"
-    //         ],
-    //       price: item.aliment_price,
-    //       weightPerGrams: item.aliment_weight,
+    //       id: ((i+1) * props.nutrient.length),
+    //       name: props.nutrient,
+    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
+    //       price: 4.5,
+    //       weightPerGrams: 100,
     //       image: require("../../../assets/Items/steak.png"),
     //       macroNutrients: {
-    //         kcal: item.aliment_energyvalue,
-    //         carbohydrates: item.aliment_carbohydrate,
-    //         protein: item.aliment_protein,
-    //         fiber: item.aliment_fiber,
-    //         fat: item.aliment_totalfat,
+    //         kcal: 100,
+    //         carbohydrates: 20,
+    //         protein: 20,
+    //         fiber: 4,
+    //         fat: 4,
     //       },
     //     } as Item;
     //   })
     // );
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+
+    axios
+      .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
+      .then((res) => {
+
+        
+    console.log(data);
+    setData(
+      res.data.map((item: any) => {
+        return {
+          id: item.id_aliment.toString(),
+          name: item.aliment_name,
+          nutrient:
+            Nutrients[
+              item.alimentType as
+                | "PROTEIN"
+                | "CARBOHYDRATE"
+                | "FIBER"
+                | "FAT"
+            ],
+          price: item.aliment_price,
+          weightPerGrams: item.aliment_weight,
+          image: require("../../../assets/Items/steak.png"),
+          macroNutrients: {
+            kcal: item.aliment_energyvalue,
+            carbohydrates: item.aliment_carbohydrate,
+            protein: item.aliment_protein,
+            fiber: item.aliment_fiber,
+            fat: item.aliment_totalfat,
+          },
+        } as Item;
+      })
+    );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }, []);
+
+
+      // setData(
+    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
+    //     return {
+    //       id: ((i+1) * props.nutrient.length),
+    //       name: props.nutrient,
+    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
+    //       price: 4.5,
+    //       weightPerGrams: 100,
+    //       image: require("../../../assets/Items/steak.png"),
+    //       macroNutrients: {
+    //         kcal: 100,
+    //         carbohydrates: 20,
+    //         protein: 20,
+    //         fiber: 4,
+    //         fat: 4,
+    //       },
+    //     } as Item;
+    //   })
+    // );
 
   function indexOfItem(item: Item): number {
     return props.items.map((i) => i.item.id).indexOf(item.id);

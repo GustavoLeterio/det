@@ -18,12 +18,12 @@ export default function HomeStackNavigator() {
       <Navigator screenOptions={{
         headerShown: false
       }}>
-        {/* <Screen name="Login" component={LoginTab} />  */}
-        <Screen name="Home" component={HomeTab} />
-        <Screen name="Plate" component={PlateTab} />
-        <Screen name="Orders" component={OrdersTab} />
+        {/* {<Screen name="Login" component={LoginTab} /> } */}
+        {/* <Screen name="Home" component={HomeTab} /> */}
+        {/* <Screen name="Plate" component={PlateTab} /> */}
+        {/* <Screen name="Orders" component={OrdersTab} /> */}
         <Screen name="Houses" component={HousesTab} />
-        <Screen name="Ranking" component={RankingTab} />
+        {/* <Screen name="Ranking" component={RankingTab} /> */}
       </Navigator>
     </NavigationContainer>
   );

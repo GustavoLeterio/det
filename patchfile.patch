@@ -1,0 +1,423 @@
+diff --git a/src/Components/GridCardComponent/GridCardComponent.tsx b/src/Components/GridCardComponent/GridCardComponent.tsx
+index 2d6dc50..2951bfa 100644
+--- a/src/Components/GridCardComponent/GridCardComponent.tsx
++++ b/src/Components/GridCardComponent/GridCardComponent.tsx
+@@ -23,67 +23,91 @@ export default function GridCardComponent(props: Props) {
+   const [data, setData] = useState<Item[]>();
+ 
+   useEffect(() => {
+-    // const headers = {
+-    //   Authorization: `Bearer ${token}`,
+-    //   "Content-Type": "application/json",
+-    // };
++    const headers = {
++      Authorization: `Bearer ${token}`,
++      "Content-Type": "application/json",
++    };
+ 
+-    // const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
++    const ingredientType = valueToKey(props.nutrient) ?? "PROTEIN";
+ 
+-    // axios
+-    //   .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
+-    //   .then((res) => {
++    // setData(
++    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
++    //     return {
++    //       id: ((i+1) * props.nutrient.length),
++    //       name: props.nutrient,
++    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
++    //       price: 4.5,
++    //       weightPerGrams: 100,
++    //       image: require("../../../assets/Items/steak.png"),
++    //       macroNutrients: {
++    //         kcal: 100,
++    //         carbohydrates: 20,
++    //         protein: 20,
++    //         fiber: 4,
++    //         fat: 4,
++    //       },
++    //     } as Item;
++    //   })
++    // );
++
++    axios
++      .get(baseURL + `/api/v1/aliment/type/${ingredientType}`, { headers })
++      .then((res) => {
++
++        
++    console.log(data);
+     setData(
+-      ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
++      res.data.map((item: any) => {
+         return {
+-          id: ((i+1) * props.nutrient.length),
+-          name: props.nutrient,
+-          nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
+-          price: 4.5,
+-          weightPerGrams: 100,
++          id: item.id_aliment.toString(),
++          name: item.aliment_name,
++          nutrient:
++            Nutrients[
++              item.alimentType as
++                | "PROTEIN"
++                | "CARBOHYDRATE"
++                | "FIBER"
++                | "FAT"
++            ],
++          price: item.aliment_price,
++          weightPerGrams: item.aliment_weight,
+           image: require("../../../assets/Items/steak.png"),
+           macroNutrients: {
+-            kcal: 100,
+-            carbohydrates: 20,
+-            protein: 20,
+-            fiber: 4,
+-            fat: 4,
++            kcal: item.aliment_energyvalue,
++            carbohydrates: item.aliment_carbohydrate,
++            protein: item.aliment_protein,
++            fiber: item.aliment_fiber,
++            fat: item.aliment_totalfat,
+           },
+         } as Item;
+       })
+     );
+-    console.log(data);
+-    // setData(
+-    //   res.data.map((item: any) => {
++    })
++    .catch((err) => {
++      console.log(err);
++    });
++  }, []);
++
++
++      // setData(
++    //   ["PROTEIN", "CARBOHYDRATE", "FIBER", "FAT"].map((nut, i) => {
+     //     return {
+-    //       id: item.id_aliment.toString(),
+-    //       name: item.aliment_name,
+-    //       nutrient:
+-    //         Nutrients[
+-    //           item.alimentType as
+-    //             | "PROTEIN"
+-    //             | "CARBOHYDRATE"
+-    //             | "FIBER"
+-    //             | "FAT"
+-    //         ],
+-    //       price: item.aliment_price,
+-    //       weightPerGrams: item.aliment_weight,
++    //       id: ((i+1) * props.nutrient.length),
++    //       name: props.nutrient,
++    //       nutrient: Nutrients[valueToKey(props.nutrient) as "PROTEIN"| "CARBOHYDRATE"| "FIBER"| "FAT"],
++    //       price: 4.5,
++    //       weightPerGrams: 100,
+     //       image: require("../../../assets/Items/steak.png"),
+     //       macroNutrients: {
+-    //         kcal: item.aliment_energyvalue,
+-    //         carbohydrates: item.aliment_carbohydrate,
+-    //         protein: item.aliment_protein,
+-    //         fiber: item.aliment_fiber,
+-    //         fat: item.aliment_totalfat,
++    //         kcal: 100,
++    //         carbohydrates: 20,
++    //         protein: 20,
++    //         fiber: 4,
++    //         fat: 4,
+     //       },
+     //     } as Item;
+     //   })
+     // );
+-    // })
+-    // .catch((err) => {
+-    //   console.log(err);
+-    // });
+-  }, []);
+ 
+   function indexOfItem(item: Item): number {
+     return props.items.map((i) => i.item.id).indexOf(item.id);
+diff --git a/src/Components/HouseFormsComponent/HouseFormsComponent.tsx b/src/Components/HouseFormsComponent/HouseFormsComponent.tsx
+index 21a9057..b17ee7e 100644
+--- a/src/Components/HouseFormsComponent/HouseFormsComponent.tsx
++++ b/src/Components/HouseFormsComponent/HouseFormsComponent.tsx
+@@ -55,6 +55,7 @@ export default function HouseFormsComponent({
+   }, []);
+ 
+   const handleForm = () => {
++    console.log(temporaryHouse)
+     const city = temporaryHouse.city
+       .trim()
+       .normalize("NFD")
+@@ -67,7 +68,7 @@ export default function HouseFormsComponent({
+         `https://servicodados.ibge.gov.br/api/v1/localidades/municipios/${city}`
+       )
+       .then((response) => {
+-        if (temporaryHouse.name.length == 0) {
++        if (temporaryHouse.name.length === 0) {
+           alert("Opa, adicione um nome para sua localização!");
+           return;
+         }
+diff --git a/src/HomeStackNavigator/HomeStackNavigator.tsx b/src/HomeStackNavigator/HomeStackNavigator.tsx
+index 6a6892e..b3d2bb0 100644
+--- a/src/HomeStackNavigator/HomeStackNavigator.tsx
++++ b/src/HomeStackNavigator/HomeStackNavigator.tsx
+@@ -18,7 +18,7 @@ export default function HomeStackNavigator() {
+       <Navigator screenOptions={{
+         headerShown: false
+       }}>
+-        {/* <Screen name="Login" component={LoginTab} />  */}
++        {<Screen name="Login" component={LoginTab} /> }
+         <Screen name="Home" component={HomeTab} />
+         <Screen name="Plate" component={PlateTab} />
+         <Screen name="Orders" component={OrdersTab} />
+diff --git a/src/Store/Slices/Login/ILogin.ts b/src/Store/Slices/Login/ILogin.ts
+index 251f1f1..0f210ce 100644
+--- a/src/Store/Slices/Login/ILogin.ts
++++ b/src/Store/Slices/Login/ILogin.ts
+@@ -2,6 +2,7 @@ interface Login {
+   isLogin: boolean;
+   form: Form;
+   token: string | null;
++  userId: string;
+ }
+ 
+ interface Form {
+diff --git a/src/Store/Slices/Login/actions.ts b/src/Store/Slices/Login/actions.ts
+index d6ed70c..f902408 100644
+--- a/src/Store/Slices/Login/actions.ts
++++ b/src/Store/Slices/Login/actions.ts
+@@ -6,5 +6,6 @@ export const {
+   changeLoginPassword,
+   changeLoginRepeatedPassword,
+   toggleRememberMe,
+-  setToken
++  setToken,
++  setUserId
+ } = loginSlice.actions;
+diff --git a/src/Store/Slices/Login/slice.ts b/src/Store/Slices/Login/slice.ts
+index 4e8a1c1..b111372 100644
+--- a/src/Store/Slices/Login/slice.ts
++++ b/src/Store/Slices/Login/slice.ts
+@@ -41,6 +41,12 @@ export const slice = createSlice({
+         token: value.payload,
+       };
+     },
++    setUserId(state, value) {
++      return {
++        ...state,
++        userId: value.payload,
++      };
++    },
+     removeToken(state) {
+       return { ...state, token: null };
+     },
+diff --git a/src/Store/Slices/Login/useLogin.ts b/src/Store/Slices/Login/useLogin.ts
+index c1a8338..7194864 100644
+--- a/src/Store/Slices/Login/useLogin.ts
++++ b/src/Store/Slices/Login/useLogin.ts
+@@ -10,6 +10,7 @@ export const login: Login = {
+     rememberMe: false,
+   },
+   token: null,
++  userId: ""
+ };
+ 
+ const inicialState: [Login] = [login];
+diff --git a/src/Store/Slices/MyHouses/actions.ts b/src/Store/Slices/MyHouses/actions.ts
+index 6e4fd31..6177e8a 100644
+--- a/src/Store/Slices/MyHouses/actions.ts
++++ b/src/Store/Slices/MyHouses/actions.ts
+@@ -1,3 +1,3 @@
+ import { slice as houseSlice } from "./slice";
+ 
+-export const { addHouse, changePrimaryHouse, changeHouse, handleAccordions, deleteHouse } = houseSlice.actions;
++export const { addHouse, changePrimaryHouse, changeHouse, handleAccordions, deleteHouse, setHouses } = houseSlice.actions;
+diff --git a/src/Store/Slices/MyHouses/slice.ts b/src/Store/Slices/MyHouses/slice.ts
+index 21b5c82..7420a9d 100644
+--- a/src/Store/Slices/MyHouses/slice.ts
++++ b/src/Store/Slices/MyHouses/slice.ts
+@@ -1,19 +1,31 @@
+ import { createSlice } from "@reduxjs/toolkit";
+ import { myHouses } from "./useMyHouses";
++import axios from "axios";
++import { baseURL } from "../../../Utils";
+ 
+ export const slice = createSlice({
+   name: "myHouses",
+   initialState: myHouses,
+   reducers: {
++    setHouses(state, payload: { payload: House[] }) {
++
++      state.houses = payload.payload;
++
++      return state
++
++    },
+     addHouse(state, payload: { payload: House }) {
+       state.houses = [...state.houses, payload.payload];
+       if (state.houses.length == 1) state.houses[0].isPrimary = true;
++      axios.put(baseURL + `/api/v1/address/` , payload)
+       return state;
+     },
+     changeHouse(state, payload: { payload: House }) {
+       state.houses[state.houses.findIndex((house: House) => {
+         return house.id == payload.payload.id
+       })] = payload.payload;
++      axios.post(baseURL + `/api/v1/create/address` , payload)
++
+       return state;
+     },
+     changePrimaryHouse(state, payload: { payload: House }) {
+@@ -26,8 +38,11 @@ export const slice = createSlice({
+       return state;
+     },
+     deleteHouse(state, payload: { payload: number }) {
+-      state.houses = state.houses.filter((house, i) => i != payload.payload)
+-      return state;
++      axios.delete(baseURL + `/api/v1/address/${state.houses[payload.payload].id}`)
++      .then(() => {
++        state.houses = state.houses.filter((house, i) => i != payload.payload)
++        return state;})
++      .catch((err) => {console.log(err)})
+     },
+     handleAccordions(state, payload: { payload: number }) {
+       state.opennedAccordionPos = payload.payload;
+diff --git a/src/Store/Slices/MyHouses/useMyHouses.ts b/src/Store/Slices/MyHouses/useMyHouses.ts
+index 04b56a7..0554ec5 100644
+--- a/src/Store/Slices/MyHouses/useMyHouses.ts
++++ b/src/Store/Slices/MyHouses/useMyHouses.ts
+@@ -4,7 +4,7 @@ import { mockup } from "../../../Mocks/house";
+ import { MyHouses } from "./IMyHouses";
+ 
+ export const myHouses: MyHouses = {
+-  houses: mockup,
++  houses: [],
+   opennedAccordionPos: -2,
+ };
+ 
+diff --git a/src/tabs/Houses/HousesTab.tsx b/src/tabs/Houses/HousesTab.tsx
+index 0fe108c..cf6801c 100644
+--- a/src/tabs/Houses/HousesTab.tsx
++++ b/src/tabs/Houses/HousesTab.tsx
+@@ -11,13 +11,26 @@ import {
+   setCities,
+   setStates,
+ } from "../../Store/Slices/AxiosGlobalRequests/actions";
++import { baseURL } from "../../Utils";
++import { setHouses } from "../../Store/Slices/MyHouses/actions";
+ 
+ export const HousesTab = ({ navigation, route }: any) => {
+   const dispatch = useAppDispatch();
+   const theme = useAppSelector((store) => store.theme);
+   const myHouses = useAppSelector((store) => store.myHouses);
++  const { userId, token } = useAppSelector((store) => store.login);
+   const { states } = useAppSelector((store) => store.axiosGlobalRequests);
++  
++  const headers = {
++    Authorization: `Bearer ${token}`,
++    "Content-Type": "application/json",
++  };
++
+   useEffect(() => {
++    axios.get(baseURL + `/api/v1/address/user/${userId}`, {headers})
++    .then((res) => {dispatch(setHouses(res.data))})
++    .catch((err) => { console.log(err)})
++    
+     if (states.length == 0)
+       axios
+         .get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+diff --git a/src/tabs/Login/LoginTab.tsx b/src/tabs/Login/LoginTab.tsx
+index b92a308..56d1adf 100644
+--- a/src/tabs/Login/LoginTab.tsx
++++ b/src/tabs/Login/LoginTab.tsx
+@@ -5,7 +5,7 @@ import { useAppSelector } from "../../Store/hooks/useAppSelector";
+ import LoginSlider from "../../Components/LoginSliderComponent/LoginSlider";
+ import InputComponent from "../../Components/InputComponent/InputComponent";
+ import { View, TouchableOpacity, StyleSheet } from "react-native";
+-import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, toggleRememberMe } from "../../Store/Slices/Login/actions";
++import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, setUserId, toggleRememberMe } from "../../Store/Slices/Login/actions";
+ import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
+ import TitleComponent from "../../Components/TitleComponent/TitleComponent";
+ import { baseURL } from "../../Utils";
+@@ -110,7 +110,8 @@ export const LoginTab = ({ navigation }: any) => {
+         <StyledButton
+           onPress={() => {
+             axios.post(baseURL + "/authenticate", { username: 'string', password: 'string'}).then(res => {
+-             dispatch(setToken(res.data))
++             dispatch(setToken(res.data.token))
++             dispatch(setUserId(res.data.userId))
+              navigation.navigate('Home')
+             }).catch(err => console.log(JSON.stringify(err)));
+           }}
+diff --git a/src/tabs/Plate/PlateTab.tsx b/src/tabs/Plate/PlateTab.tsx
+index 6c78657..5665481 100644
+--- a/src/tabs/Plate/PlateTab.tsx
++++ b/src/tabs/Plate/PlateTab.tsx
+@@ -10,9 +10,9 @@ import { useEffect, useState } from "react";
+ import { openAccordion } from "../../Store/Slices/Accordion/actions";
+ import NutrientAccordionComponent from "../../Components/NutrientAccordionComponent/NutrientAccordionComponent";
+ import { Nutrients } from "../../Utils/Nutrients.enum";
+-import { Button, Text } from "@rneui/base";
+-import TitleComponent from "../../Components/TitleComponent/TitleComponent";
+ import HousesAccordionComponent from "../../Components/HousesAccordionComponent/HousesAccordionComponent";
++import axios from "axios";
++import { baseURL } from "../../Utils";
+ 
+ export const PlateTab = ({ navigation, route }: any) => {
+   const dispatch = useAppDispatch();
+@@ -21,9 +21,34 @@ export const PlateTab = ({ navigation, route }: any) => {
+   const { items, endereço } = useAppSelector((store) => store.order);
+   const [modalVisible, setModalVisible] = useState(false);
+   const myHouses = useAppSelector((store) => store.myHouses);
++  const { token, userId  } = useAppSelector((store) => store.login);
++
+ 
+   useEffect(() => {
+     setModalVisible(false);
++
++    if(modalVisible){
++      const headers = {
++        Authorization: `Bearer ${token}`,
++        "Content-Type": "application/json",
++      };
++
++      const data = {
++        id_user: userId,
++        deliver_adress: "1",
++        items: items.map((item) => {
++          return {
++            id: item.item.id,
++            weight: item.weight,
++            actualPricePerKilo: item.item.price,
++          };
++        }),
++      };
++  
++      axios.post(baseURL + '/api/v1/create/request', data , {headers} ).then((res) => {
++        console.log(res)
++      })
++    }
+   }, [endereço]);
+ 
+   useEffect(() => {
+@@ -175,18 +200,6 @@ export const PlateTab = ({ navigation, route }: any) => {
+           }}
+           onPress={() => {
+             setModalVisible(true);
+-            const data = {
+-              id_user: "1",
+-              deliver_adress: "1",
+-              items: items.map((item) => {
+-                return {
+-                  id: item.item.id,
+-                  weight: item.weight,
+-                  actualPricePerKilo: item.item.price,
+-                };
+-              }),
+-            };
+-            console.log(data);
+           }}
+         >
+           <ButtonText>Realizar Pedido</ButtonText>

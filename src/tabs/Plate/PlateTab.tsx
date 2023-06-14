@@ -10,9 +10,9 @@ import { useEffect, useState } from "react";
 import { openAccordion } from "../../Store/Slices/Accordion/actions";
 import NutrientAccordionComponent from "../../Components/NutrientAccordionComponent/NutrientAccordionComponent";
 import { Nutrients } from "../../Utils/Nutrients.enum";
-import { Button, Text } from "@rneui/base";
-import TitleComponent from "../../Components/TitleComponent/TitleComponent";
 import HousesAccordionComponent from "../../Components/HousesAccordionComponent/HousesAccordionComponent";
+import axios from "axios";
+import { baseURL } from "../../Utils";
 
 export const PlateTab = ({ navigation, route }: any) => {
   const dispatch = useAppDispatch();
@@ -21,9 +21,34 @@ export const PlateTab = ({ navigation, route }: any) => {
   const { items, endereço } = useAppSelector((store) => store.order);
   const [modalVisible, setModalVisible] = useState(false);
   const myHouses = useAppSelector((store) => store.myHouses);
+  const { token, userId  } = useAppSelector((store) => store.login);
+
 
   useEffect(() => {
     setModalVisible(false);
+
+    if(modalVisible){
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const data = {
+        id_user: userId,
+        deliver_adress: "1",
+        items: items.map((item) => {
+          return {
+            id: item.item.id,
+            weight: item.weight,
+            actualPricePerKilo: item.item.price,
+          };
+        }),
+      };
+  
+      axios.post(baseURL + '/api/v1/create/request', data , {headers} ).then((res) => {
+        console.log(res)
+      })
+    }
   }, [endereço]);
 
   useEffect(() => {
@@ -175,18 +200,6 @@ export const PlateTab = ({ navigation, route }: any) => {
           }}
           onPress={() => {
             setModalVisible(true);
-            const data = {
-              id_user: "1",
-              deliver_adress: "1",
-              items: items.map((item) => {
-                return {
-                  id: item.item.id,
-                  weight: item.weight,
-                  actualPricePerKilo: item.item.price,
-                };
-              }),
-            };
-            console.log(data);
           }}
         >
           <ButtonText>Realizar Pedido</ButtonText>

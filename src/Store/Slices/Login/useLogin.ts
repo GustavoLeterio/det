@@ -10,6 +10,7 @@ export const login: Login = {
     rememberMe: false,
   },
   token: null,
+  userId: ""
 };
 
 const inicialState: [Login] = [login];

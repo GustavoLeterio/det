@@ -5,7 +5,7 @@ import { useAppSelector } from "../../Store/hooks/useAppSelector";
 import LoginSlider from "../../Components/LoginSliderComponent/LoginSlider";
 import InputComponent from "../../Components/InputComponent/InputComponent";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, toggleRememberMe } from "../../Store/Slices/Login/actions";
+import { changeLoginEmail, changeLoginPassword, changeLoginState, setToken, setUserId, toggleRememberMe } from "../../Store/Slices/Login/actions";
 import CheckboxComponent from "../../Components/CheckboxComponent/CheckboxComponent";
 import TitleComponent from "../../Components/TitleComponent/TitleComponent";
 import { baseURL } from "../../Utils";
@@ -110,7 +110,8 @@ export const LoginTab = ({ navigation }: any) => {
         <StyledButton
           onPress={() => {
             axios.post(baseURL + "/authenticate", { username: 'string', password: 'string'}).then(res => {
-             dispatch(setToken(res.data))
+             dispatch(setToken(res.data.token))
+             dispatch(setUserId(res.data.userId))
              navigation.navigate('Home')
             }).catch(err => console.log(JSON.stringify(err)));
           }}

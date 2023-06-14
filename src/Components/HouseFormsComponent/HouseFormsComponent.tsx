@@ -55,6 +55,7 @@ export default function HouseFormsComponent({
   }, []);
 
   const handleForm = () => {
+    console.log(temporaryHouse)
     const city = temporaryHouse.city
       .trim()
       .normalize("NFD")
@@ -67,7 +68,7 @@ export default function HouseFormsComponent({
         `https://servicodados.ibge.gov.br/api/v1/localidades/municipios/${city}`
       )
       .then((response) => {
-        if (temporaryHouse.name.length == 0) {
+        if (temporaryHouse.name.length === 0) {
           alert("Opa, adicione um nome para sua localização!");
           return;
         }

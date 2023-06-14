@@ -41,6 +41,12 @@ export const slice = createSlice({
         token: value.payload,
       };
     },
+    setUserId(state, value) {
+      return {
+        ...state,
+        userId: value.payload,
+      };
+    },
     removeToken(state) {
       return { ...state, token: null };
     },
